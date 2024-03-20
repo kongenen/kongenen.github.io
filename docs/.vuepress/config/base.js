@@ -1,1 +1,1 @@
-module.exports='/vdoingBlog/'
+module.exports='/kongenen.github.io/'
