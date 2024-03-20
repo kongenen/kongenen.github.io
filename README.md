@@ -20,21 +20,21 @@ GitHub地址：
 github.com/xugaoyi/vue…
 
 ## 安装和使用
-# clone the project
+#clone the project
 git clone https://github.com/xugaoyi/vuepress-theme-vdoing.git
 
-# enter the project directory
+#enter the project directory
 cd vuepress-theme-vdoing
 
-# install dependency
+#install dependency
 npm install # or yarn install
 
-# develop
+#develop
 npm run dev # or yarn dev
 
 ## 部署脚本
 运行deploy.sh文件
-
+，文件内容如下
 
 
 #!/usr/bin/env sh
