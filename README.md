@@ -23,10 +23,12 @@ git clone https://github.com/xugaoyi/vuepress-theme-vdoing.git
 #enter the project directory
 cd vuepress-theme-vdoing
 
-#install dependency
+#install dependency   这个命令会根据项目中的 package.json 文件下载和安装所有依赖的库和工具（包括 VuePress 主题、插件等）。这些依赖会被安装在一个 node_modules 文件夹中。
 npm install # or yarn install
 
-#develop
+#develop  npm run dev 或 yarn dev 会启动一个本地开发服务器，通常是在 localhost:8080 或类似的端口。这个开发服务器会监控你的代码，当你对代码进行修改时，它会自动刷新页面，展示最新的更改（即所谓的 "热更新"）。
+
+# 在 VuePress 项目中，这个命令会运行 VuePress 的开发模式，允许你在本地预览文档和网站的外观，方便调试和开发。
 npm run dev # or yarn dev
 ```
 ## 部署脚本
