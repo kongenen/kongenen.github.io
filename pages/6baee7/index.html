@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>【模型c++部署】yolov8（检测、分类、分割、姿态）使用openvino进行部署 | kongen</title>
+    <meta name="generator" content="VuePress 1.9.9">
+    <link rel="icon" href="/img/678.ico">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_3114978_qe0b39no76.css">
+    <meta name="description" content="Hello">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <link rel="preload" href="/assets/css/0.styles.7344aa00.css" as="style"><link rel="preload" href="/assets/js/app.03b8874a.js" as="script"><link rel="preload" href="/assets/js/2.a3bc2cb2.js" as="script"><link rel="preload" href="/assets/js/32.b0b0a6d4.js" as="script"><link rel="preload" href="/assets/js/6.2f3b94ea.js" as="script"><link rel="preload" href="/assets/js/11.bd26694d.js" as="script"><link rel="preload" href="/assets/js/4.bfee93d3.js" as="script"><link rel="prefetch" href="/assets/js/10.66c2f6f5.js"><link rel="prefetch" href="/assets/js/100.961fe664.js"><link rel="prefetch" href="/assets/js/101.ede416a3.js"><link rel="prefetch" href="/assets/js/102.abe6b4a9.js"><link rel="prefetch" href="/assets/js/103.da90c63f.js"><link rel="prefetch" href="/assets/js/104.95132546.js"><link rel="prefetch" href="/assets/js/105.9dbb5a62.js"><link rel="prefetch" href="/assets/js/106.19987338.js"><link rel="prefetch" href="/assets/js/107.5f06947b.js"><link rel="prefetch" href="/assets/js/108.591912ba.js"><link rel="prefetch" href="/assets/js/109.84807106.js"><link rel="prefetch" href="/assets/js/110.edddedb7.js"><link rel="prefetch" href="/assets/js/111.07b116f2.js"><link rel="prefetch" href="/assets/js/112.c11d4a5e.js"><link rel="prefetch" href="/assets/js/113.1b0eedb8.js"><link rel="prefetch" href="/assets/js/114.553724e6.js"><link rel="prefetch" href="/assets/js/115.c0c63e8e.js"><link rel="prefetch" href="/assets/js/116.1c681ab3.js"><link rel="prefetch" href="/assets/js/117.3fd180a2.js"><link rel="prefetch" href="/assets/js/118.966e15ef.js"><link rel="prefetch" href="/assets/js/119.40853c98.js"><link rel="prefetch" href="/assets/js/12.165cf733.js"><link rel="prefetch" href="/assets/js/120.499cb8f0.js"><link rel="prefetch" href="/assets/js/121.ae31cd74.js"><link rel="prefetch" href="/assets/js/122.dabc2896.js"><link rel="prefetch" href="/assets/js/123.d69f3683.js"><link rel="prefetch" href="/assets/js/124.44f8340e.js"><link rel="prefetch" href="/assets/js/125.599a1011.js"><link rel="prefetch" href="/assets/js/126.566dc4e9.js"><link rel="prefetch" href="/assets/js/127.5574e5dd.js"><link rel="prefetch" href="/assets/js/128.0d008835.js"><link rel="prefetch" href="/assets/js/129.5124594d.js"><link rel="prefetch" href="/assets/js/13.23ff298f.js"><link rel="prefetch" href="/assets/js/130.ca2d1c7a.js"><link rel="prefetch" href="/assets/js/131.27dc0585.js"><link rel="prefetch" href="/assets/js/132.6d815c0c.js"><link rel="prefetch" href="/assets/js/133.dcd9a26e.js"><link rel="prefetch" href="/assets/js/134.cdc8905f.js"><link rel="prefetch" href="/assets/js/135.4aa802b4.js"><link rel="prefetch" href="/assets/js/136.a6bd23ff.js"><link rel="prefetch" href="/assets/js/137.07f0b052.js"><link rel="prefetch" href="/assets/js/138.54c768f1.js"><link rel="prefetch" href="/assets/js/139.bfe7a10a.js"><link rel="prefetch" href="/assets/js/14.4fbfc1ec.js"><link rel="prefetch" href="/assets/js/140.d7a9d148.js"><link rel="prefetch" href="/assets/js/141.5c58cfbc.js"><link rel="prefetch" href="/assets/js/142.6cf98e0c.js"><link rel="prefetch" href="/assets/js/143.2cdadb3b.js"><link rel="prefetch" href="/assets/js/144.f9049ed8.js"><link rel="prefetch" href="/assets/js/145.0250feab.js"><link rel="prefetch" href="/assets/js/146.09f86d45.js"><link rel="prefetch" href="/assets/js/147.18616c4e.js"><link rel="prefetch" href="/assets/js/148.2889776c.js"><link rel="prefetch" href="/assets/js/149.6f5368ba.js"><link rel="prefetch" href="/assets/js/15.a7d53c6e.js"><link rel="prefetch" href="/assets/js/150.922236b3.js"><link rel="prefetch" href="/assets/js/151.2ce35de1.js"><link rel="prefetch" href="/assets/js/152.bbe2b4df.js"><link rel="prefetch" href="/assets/js/153.482ff76b.js"><link rel="prefetch" href="/assets/js/154.6b3f7f8a.js"><link rel="prefetch" href="/assets/js/155.8264959f.js"><link rel="prefetch" href="/assets/js/156.5062df7a.js"><link rel="prefetch" href="/assets/js/157.48326d85.js"><link rel="prefetch" href="/assets/js/158.ecf58814.js"><link rel="prefetch" href="/assets/js/159.1e5b5c59.js"><link rel="prefetch" href="/assets/js/16.dbdb2c42.js"><link rel="prefetch" href="/assets/js/160.4b2e0ba3.js"><link rel="prefetch" href="/assets/js/161.8b0086c7.js"><link rel="prefetch" href="/assets/js/162.20861da6.js"><link rel="prefetch" href="/assets/js/163.e5d3c34e.js"><link rel="prefetch" href="/assets/js/164.a6270aef.js"><link rel="prefetch" href="/assets/js/165.de6f424c.js"><link rel="prefetch" href="/assets/js/166.dce914af.js"><link rel="prefetch" href="/assets/js/167.1baf8de3.js"><link rel="prefetch" href="/assets/js/168.74fc12f7.js"><link rel="prefetch" href="/assets/js/169.afb5e916.js"><link rel="prefetch" href="/assets/js/17.0651b807.js"><link rel="prefetch" href="/assets/js/170.76062a1f.js"><link rel="prefetch" href="/assets/js/171.518f7ff3.js"><link rel="prefetch" href="/assets/js/172.780bed1c.js"><link rel="prefetch" href="/assets/js/173.2223a373.js"><link rel="prefetch" href="/assets/js/174.e2583b2c.js"><link rel="prefetch" href="/assets/js/175.9b5f6efa.js"><link rel="prefetch" href="/assets/js/176.0e74778b.js"><link rel="prefetch" href="/assets/js/177.394d6f8f.js"><link rel="prefetch" href="/assets/js/178.59e588d4.js"><link rel="prefetch" href="/assets/js/179.fbab975b.js"><link rel="prefetch" href="/assets/js/18.fba74115.js"><link rel="prefetch" href="/assets/js/180.ce0cd3b0.js"><link rel="prefetch" href="/assets/js/181.afd808f4.js"><link rel="prefetch" href="/assets/js/182.36b6b6e1.js"><link rel="prefetch" href="/assets/js/183.eca1ba20.js"><link rel="prefetch" href="/assets/js/184.7daeaf94.js"><link rel="prefetch" href="/assets/js/185.9978cbe9.js"><link rel="prefetch" href="/assets/js/186.8bffad6b.js"><link rel="prefetch" href="/assets/js/187.83fb448a.js"><link rel="prefetch" href="/assets/js/188.2fbd0b71.js"><link rel="prefetch" href="/assets/js/189.c725cd76.js"><link rel="prefetch" href="/assets/js/19.299ebd23.js"><link rel="prefetch" href="/assets/js/190.86058f1c.js"><link rel="prefetch" href="/assets/js/191.9acf556f.js"><link rel="prefetch" href="/assets/js/192.978e5297.js"><link rel="prefetch" href="/assets/js/193.9ef7a5fc.js"><link rel="prefetch" href="/assets/js/194.7cf25ae8.js"><link rel="prefetch" href="/assets/js/195.d4ad46a0.js"><link rel="prefetch" href="/assets/js/196.9eededed.js"><link rel="prefetch" href="/assets/js/197.81415fe3.js"><link rel="prefetch" href="/assets/js/198.c7b911f9.js"><link rel="prefetch" href="/assets/js/199.f4b63c55.js"><link rel="prefetch" href="/assets/js/20.ee6aed3b.js"><link rel="prefetch" href="/assets/js/200.66bbdc51.js"><link rel="prefetch" href="/assets/js/201.a6ec7fec.js"><link rel="prefetch" href="/assets/js/202.0414930d.js"><link rel="prefetch" href="/assets/js/203.21c45553.js"><link rel="prefetch" href="/assets/js/204.cee9e1b1.js"><link rel="prefetch" href="/assets/js/205.1b8bd8b5.js"><link rel="prefetch" href="/assets/js/206.a5e91ed7.js"><link rel="prefetch" href="/assets/js/207.bbb5e186.js"><link rel="prefetch" href="/assets/js/208.54a8120c.js"><link rel="prefetch" href="/assets/js/209.4ae2d91c.js"><link rel="prefetch" href="/assets/js/21.2def284b.js"><link rel="prefetch" href="/assets/js/210.cfd37a03.js"><link rel="prefetch" href="/assets/js/211.39764211.js"><link rel="prefetch" href="/assets/js/212.3603d233.js"><link rel="prefetch" href="/assets/js/213.c1a27f37.js"><link rel="prefetch" href="/assets/js/214.2b3a6363.js"><link rel="prefetch" href="/assets/js/215.56c5bd56.js"><link rel="prefetch" href="/assets/js/216.fd223d25.js"><link rel="prefetch" href="/assets/js/217.8a613f05.js"><link rel="prefetch" href="/assets/js/218.259fd097.js"><link rel="prefetch" href="/assets/js/219.69c74ed6.js"><link rel="prefetch" href="/assets/js/22.d76decb5.js"><link rel="prefetch" href="/assets/js/220.7e14c85e.js"><link rel="prefetch" href="/assets/js/221.3e59a435.js"><link rel="prefetch" href="/assets/js/222.0e60209d.js"><link rel="prefetch" href="/assets/js/223.299936fa.js"><link rel="prefetch" href="/assets/js/224.f93a6bb0.js"><link rel="prefetch" href="/assets/js/225.e532e611.js"><link rel="prefetch" href="/assets/js/226.9994e3f2.js"><link rel="prefetch" href="/assets/js/227.0b8e13ef.js"><link rel="prefetch" href="/assets/js/228.4c23e096.js"><link rel="prefetch" href="/assets/js/229.947ed096.js"><link rel="prefetch" href="/assets/js/23.13c5f217.js"><link rel="prefetch" href="/assets/js/230.1f38f670.js"><link rel="prefetch" href="/assets/js/231.fb144b23.js"><link rel="prefetch" href="/assets/js/232.46ef2636.js"><link rel="prefetch" href="/assets/js/233.538032bc.js"><link rel="prefetch" href="/assets/js/234.3d59f609.js"><link rel="prefetch" href="/assets/js/235.24c1fd32.js"><link rel="prefetch" href="/assets/js/236.81148811.js"><link rel="prefetch" href="/assets/js/237.c61ced82.js"><link rel="prefetch" href="/assets/js/238.300bea63.js"><link rel="prefetch" href="/assets/js/239.85542cd5.js"><link rel="prefetch" href="/assets/js/24.6a0e51a1.js"><link rel="prefetch" href="/assets/js/240.6bc5ddea.js"><link rel="prefetch" href="/assets/js/241.67dfe35f.js"><link rel="prefetch" href="/assets/js/242.98968ab7.js"><link rel="prefetch" href="/assets/js/243.3d8d7031.js"><link rel="prefetch" href="/assets/js/244.d5247532.js"><link rel="prefetch" href="/assets/js/245.c252be76.js"><link rel="prefetch" href="/assets/js/246.c736d375.js"><link rel="prefetch" href="/assets/js/247.cf802928.js"><link rel="prefetch" href="/assets/js/248.f0c31a06.js"><link rel="prefetch" href="/assets/js/249.0834d68a.js"><link rel="prefetch" href="/assets/js/25.1ee1061b.js"><link rel="prefetch" href="/assets/js/250.97d89b3e.js"><link rel="prefetch" href="/assets/js/251.f62332f7.js"><link rel="prefetch" href="/assets/js/252.add8913a.js"><link rel="prefetch" href="/assets/js/253.b31655de.js"><link rel="prefetch" href="/assets/js/254.953e34f4.js"><link rel="prefetch" href="/assets/js/255.76306ac8.js"><link rel="prefetch" href="/assets/js/256.28b1c0fa.js"><link rel="prefetch" href="/assets/js/257.667fdfaf.js"><link rel="prefetch" href="/assets/js/258.d56656d0.js"><link rel="prefetch" href="/assets/js/259.f0269da0.js"><link rel="prefetch" href="/assets/js/26.954564a7.js"><link rel="prefetch" href="/assets/js/260.69aecc24.js"><link rel="prefetch" href="/assets/js/261.77e8f04b.js"><link rel="prefetch" href="/assets/js/262.1943043e.js"><link rel="prefetch" href="/assets/js/263.f3419632.js"><link rel="prefetch" href="/assets/js/264.70fd0735.js"><link rel="prefetch" href="/assets/js/265.812285dc.js"><link rel="prefetch" href="/assets/js/266.23236079.js"><link rel="prefetch" href="/assets/js/267.e29bed34.js"><link rel="prefetch" href="/assets/js/268.a80af987.js"><link rel="prefetch" href="/assets/js/269.d4f2bd17.js"><link rel="prefetch" href="/assets/js/27.089db5a1.js"><link rel="prefetch" href="/assets/js/270.964bfaae.js"><link rel="prefetch" href="/assets/js/271.dd0d04c4.js"><link rel="prefetch" href="/assets/js/272.e4f1d52a.js"><link rel="prefetch" href="/assets/js/273.3d83b85a.js"><link rel="prefetch" href="/assets/js/274.3f37fdc0.js"><link rel="prefetch" href="/assets/js/275.4aa022ac.js"><link rel="prefetch" href="/assets/js/276.2ef22856.js"><link rel="prefetch" href="/assets/js/277.ea4432f7.js"><link rel="prefetch" href="/assets/js/278.775f0128.js"><link rel="prefetch" href="/assets/js/279.ba42d7ef.js"><link rel="prefetch" href="/assets/js/28.79de38a6.js"><link rel="prefetch" href="/assets/js/280.c2fa75ea.js"><link rel="prefetch" href="/assets/js/281.267aeacd.js"><link rel="prefetch" href="/assets/js/282.fb9f38e6.js"><link rel="prefetch" href="/assets/js/283.d35f0a81.js"><link rel="prefetch" href="/assets/js/284.bfccd548.js"><link rel="prefetch" href="/assets/js/285.58ff27ad.js"><link rel="prefetch" href="/assets/js/286.59d6b996.js"><link rel="prefetch" href="/assets/js/287.ef8e696e.js"><link rel="prefetch" href="/assets/js/288.9466b3b6.js"><link rel="prefetch" href="/assets/js/289.c6f1f197.js"><link rel="prefetch" href="/assets/js/29.d3b54533.js"><link rel="prefetch" href="/assets/js/290.5c929595.js"><link rel="prefetch" href="/assets/js/291.3ab619b6.js"><link rel="prefetch" href="/assets/js/292.347b5541.js"><link rel="prefetch" href="/assets/js/293.9a029bd6.js"><link rel="prefetch" href="/assets/js/294.8af7c0f9.js"><link rel="prefetch" href="/assets/js/295.6c691e4d.js"><link rel="prefetch" href="/assets/js/296.41f75d3c.js"><link rel="prefetch" href="/assets/js/297.b3a471ad.js"><link rel="prefetch" href="/assets/js/298.ecc7e74e.js"><link rel="prefetch" href="/assets/js/299.6a4990f1.js"><link rel="prefetch" href="/assets/js/3.4eda01fa.js"><link rel="prefetch" href="/assets/js/30.68d9763d.js"><link rel="prefetch" href="/assets/js/300.c69f4a86.js"><link rel="prefetch" href="/assets/js/301.f36f2db6.js"><link rel="prefetch" href="/assets/js/302.becec606.js"><link rel="prefetch" href="/assets/js/303.7fabdab9.js"><link rel="prefetch" href="/assets/js/304.85055c0b.js"><link rel="prefetch" href="/assets/js/305.172f560c.js"><link rel="prefetch" href="/assets/js/306.d7f5d638.js"><link rel="prefetch" href="/assets/js/307.7f5eb329.js"><link rel="prefetch" href="/assets/js/308.4c446535.js"><link rel="prefetch" href="/assets/js/309.18c6881c.js"><link rel="prefetch" href="/assets/js/31.cf1c4e64.js"><link rel="prefetch" href="/assets/js/310.624a7d8e.js"><link rel="prefetch" href="/assets/js/311.c0c0577b.js"><link rel="prefetch" href="/assets/js/312.2b220e8d.js"><link rel="prefetch" href="/assets/js/313.c8f18988.js"><link rel="prefetch" href="/assets/js/314.81e6a297.js"><link rel="prefetch" href="/assets/js/315.a7186a13.js"><link rel="prefetch" href="/assets/js/316.34b3dc66.js"><link rel="prefetch" href="/assets/js/317.ba588d82.js"><link rel="prefetch" href="/assets/js/318.8d40007f.js"><link rel="prefetch" href="/assets/js/319.b29117d3.js"><link rel="prefetch" href="/assets/js/320.f618b11b.js"><link rel="prefetch" href="/assets/js/321.722da531.js"><link rel="prefetch" href="/assets/js/322.1164b923.js"><link rel="prefetch" href="/assets/js/323.8cf9f1c2.js"><link rel="prefetch" href="/assets/js/324.2b28c83f.js"><link rel="prefetch" href="/assets/js/325.17d9a090.js"><link rel="prefetch" href="/assets/js/326.98360db2.js"><link rel="prefetch" href="/assets/js/327.6a4c8706.js"><link rel="prefetch" href="/assets/js/328.72d688bf.js"><link rel="prefetch" href="/assets/js/329.e8246c58.js"><link rel="prefetch" href="/assets/js/33.89137021.js"><link rel="prefetch" href="/assets/js/330.555518a9.js"><link rel="prefetch" href="/assets/js/331.755c56b7.js"><link rel="prefetch" href="/assets/js/332.33f9fae6.js"><link rel="prefetch" href="/assets/js/333.0cc22544.js"><link rel="prefetch" href="/assets/js/334.69f39731.js"><link rel="prefetch" href="/assets/js/335.d45b727d.js"><link rel="prefetch" href="/assets/js/336.3bba881c.js"><link rel="prefetch" href="/assets/js/337.863284b1.js"><link rel="prefetch" href="/assets/js/338.9f3185e4.js"><link rel="prefetch" href="/assets/js/339.4f41e2f7.js"><link rel="prefetch" href="/assets/js/34.b9a00b20.js"><link rel="prefetch" href="/assets/js/340.1b570217.js"><link rel="prefetch" href="/assets/js/341.b46e524a.js"><link rel="prefetch" href="/assets/js/342.a35860a3.js"><link rel="prefetch" href="/assets/js/343.b8ceee32.js"><link rel="prefetch" href="/assets/js/344.d9bf422b.js"><link rel="prefetch" href="/assets/js/345.e56a8680.js"><link rel="prefetch" href="/assets/js/346.094ffc3e.js"><link rel="prefetch" href="/assets/js/347.d7edbfbc.js"><link rel="prefetch" href="/assets/js/348.6af0f84f.js"><link rel="prefetch" href="/assets/js/349.f3cc5bd4.js"><link rel="prefetch" href="/assets/js/35.aea91925.js"><link rel="prefetch" href="/assets/js/350.9780c4ab.js"><link rel="prefetch" href="/assets/js/351.84bf241d.js"><link rel="prefetch" href="/assets/js/352.0b32f89d.js"><link rel="prefetch" href="/assets/js/353.10149d87.js"><link rel="prefetch" href="/assets/js/354.9cadc26e.js"><link rel="prefetch" href="/assets/js/355.a9c5c218.js"><link rel="prefetch" href="/assets/js/356.131181ca.js"><link rel="prefetch" href="/assets/js/357.37f4cc91.js"><link rel="prefetch" href="/assets/js/358.68f4b560.js"><link rel="prefetch" href="/assets/js/359.ac962850.js"><link rel="prefetch" href="/assets/js/36.2c4ce2c6.js"><link rel="prefetch" href="/assets/js/360.d4cb9116.js"><link rel="prefetch" href="/assets/js/361.6d158b44.js"><link rel="prefetch" href="/assets/js/362.ca844ea6.js"><link rel="prefetch" href="/assets/js/363.da04297e.js"><link rel="prefetch" href="/assets/js/364.8b696070.js"><link rel="prefetch" href="/assets/js/365.df3530b3.js"><link rel="prefetch" href="/assets/js/366.9b84cee9.js"><link rel="prefetch" href="/assets/js/367.7522ee59.js"><link rel="prefetch" href="/assets/js/368.4c56d1f4.js"><link rel="prefetch" href="/assets/js/369.c81f05ad.js"><link rel="prefetch" href="/assets/js/37.4f8165c5.js"><link rel="prefetch" href="/assets/js/370.559f0975.js"><link rel="prefetch" href="/assets/js/371.2a8a6eec.js"><link rel="prefetch" href="/assets/js/372.725719d6.js"><link rel="prefetch" href="/assets/js/373.78a5bcab.js"><link rel="prefetch" href="/assets/js/374.e73d8c95.js"><link rel="prefetch" href="/assets/js/375.ea0e546e.js"><link rel="prefetch" href="/assets/js/376.b95775fe.js"><link rel="prefetch" href="/assets/js/377.dd958b94.js"><link rel="prefetch" href="/assets/js/378.ac11fc50.js"><link rel="prefetch" href="/assets/js/379.bfcc515c.js"><link rel="prefetch" href="/assets/js/38.e77b775e.js"><link rel="prefetch" href="/assets/js/380.3aa337a8.js"><link rel="prefetch" href="/assets/js/381.3daadec0.js"><link rel="prefetch" href="/assets/js/382.b61f88bb.js"><link rel="prefetch" href="/assets/js/383.2effd6f3.js"><link rel="prefetch" href="/assets/js/384.5a1697f9.js"><link rel="prefetch" href="/assets/js/385.da46ac39.js"><link rel="prefetch" href="/assets/js/386.dbf57705.js"><link rel="prefetch" href="/assets/js/387.78c24814.js"><link rel="prefetch" href="/assets/js/388.dd96d641.js"><link rel="prefetch" href="/assets/js/389.9e954214.js"><link rel="prefetch" href="/assets/js/39.6d284071.js"><link rel="prefetch" href="/assets/js/390.e44a5fcd.js"><link rel="prefetch" href="/assets/js/391.71d2b556.js"><link rel="prefetch" href="/assets/js/392.58585f04.js"><link rel="prefetch" href="/assets/js/393.a6ed841e.js"><link rel="prefetch" href="/assets/js/394.cc3f5fb2.js"><link rel="prefetch" href="/assets/js/395.acf7fe09.js"><link rel="prefetch" href="/assets/js/396.bd1d74a4.js"><link rel="prefetch" href="/assets/js/397.f50e3201.js"><link rel="prefetch" href="/assets/js/398.c1f4bc63.js"><link rel="prefetch" href="/assets/js/399.f8b45fce.js"><link rel="prefetch" href="/assets/js/40.8fe0a801.js"><link rel="prefetch" href="/assets/js/400.f6e0d2d3.js"><link rel="prefetch" href="/assets/js/41.9e4044b3.js"><link rel="prefetch" href="/assets/js/42.ed68bcfc.js"><link rel="prefetch" href="/assets/js/43.847fdcdd.js"><link rel="prefetch" href="/assets/js/44.42eca7ce.js"><link rel="prefetch" href="/assets/js/45.ca346040.js"><link rel="prefetch" href="/assets/js/46.4c96eb58.js"><link rel="prefetch" href="/assets/js/47.df00ae6b.js"><link rel="prefetch" href="/assets/js/48.997046bc.js"><link rel="prefetch" href="/assets/js/49.16ee6bd3.js"><link rel="prefetch" href="/assets/js/5.1cde13ac.js"><link rel="prefetch" href="/assets/js/50.bdd3b647.js"><link rel="prefetch" href="/assets/js/51.032f2cbb.js"><link rel="prefetch" href="/assets/js/52.039c9ab4.js"><link rel="prefetch" href="/assets/js/53.af466b11.js"><link rel="prefetch" href="/assets/js/54.f1fe1d0c.js"><link rel="prefetch" href="/assets/js/55.ad53d824.js"><link rel="prefetch" href="/assets/js/56.9de4ad52.js"><link rel="prefetch" href="/assets/js/57.682ad5d4.js"><link rel="prefetch" href="/assets/js/58.d69a8dea.js"><link rel="prefetch" href="/assets/js/59.53684eb9.js"><link rel="prefetch" href="/assets/js/60.e82e986d.js"><link rel="prefetch" href="/assets/js/61.e2571c48.js"><link rel="prefetch" href="/assets/js/62.0dbad89d.js"><link rel="prefetch" href="/assets/js/63.cb9d5ba1.js"><link rel="prefetch" href="/assets/js/64.c600c106.js"><link rel="prefetch" href="/assets/js/65.9cb92a68.js"><link rel="prefetch" href="/assets/js/66.0e018baa.js"><link rel="prefetch" href="/assets/js/67.01fdd6ef.js"><link rel="prefetch" href="/assets/js/68.c8ae78b4.js"><link rel="prefetch" href="/assets/js/69.dbadae57.js"><link rel="prefetch" href="/assets/js/7.5206cd44.js"><link rel="prefetch" href="/assets/js/70.d71ef916.js"><link rel="prefetch" href="/assets/js/71.516a5892.js"><link rel="prefetch" href="/assets/js/72.bca0ddc8.js"><link rel="prefetch" href="/assets/js/73.17aadf57.js"><link rel="prefetch" href="/assets/js/74.9e9580bd.js"><link rel="prefetch" href="/assets/js/75.eccc53b0.js"><link rel="prefetch" href="/assets/js/76.a93021db.js"><link rel="prefetch" href="/assets/js/77.30758c07.js"><link rel="prefetch" href="/assets/js/78.83e07b90.js"><link rel="prefetch" href="/assets/js/79.31b1dc69.js"><link rel="prefetch" href="/assets/js/8.4b631556.js"><link rel="prefetch" href="/assets/js/80.fee68ac0.js"><link rel="prefetch" href="/assets/js/81.33a320f3.js"><link rel="prefetch" href="/assets/js/82.cfb798b8.js"><link rel="prefetch" href="/assets/js/83.4cbd27dc.js"><link rel="prefetch" href="/assets/js/84.d212e0c2.js"><link rel="prefetch" href="/assets/js/85.ddab67f7.js"><link rel="prefetch" href="/assets/js/86.af0afa96.js"><link rel="prefetch" href="/assets/js/87.21205e60.js"><link rel="prefetch" href="/assets/js/88.bfe17614.js"><link rel="prefetch" href="/assets/js/89.2e6efcb5.js"><link rel="prefetch" href="/assets/js/9.f41c43fb.js"><link rel="prefetch" href="/assets/js/90.564b4d64.js"><link rel="prefetch" href="/assets/js/91.30a4f428.js"><link rel="prefetch" href="/assets/js/92.fc897ab5.js"><link rel="prefetch" href="/assets/js/93.07e35d35.js"><link rel="prefetch" href="/assets/js/94.6e41d954.js"><link rel="prefetch" href="/assets/js/95.9e5d0c99.js"><link rel="prefetch" href="/assets/js/96.45f69840.js"><link rel="prefetch" href="/assets/js/97.f1171c11.js"><link rel="prefetch" href="/assets/js/98.45b40ab1.js"><link rel="prefetch" href="/assets/js/99.9d5eaee2.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.7344aa00.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu have-body-img"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/54.jpg" alt="kongen" class="logo"> <span class="site-name can-hide">kongen</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/navigation/" class="nav-link">导航站</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="机器视觉" class="dropdown-title"><a href="/web/" class="link-title">机器视觉</a> <span class="title" style="display:none;">机器视觉</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>学习教程</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/note/opencv/" class="nav-link">Opencv教程</a></li><li class="dropdown-subitem"><a href="/note/c++base/" class="nav-link">C++基础教程</a></li><li class="dropdown-subitem"><a href="/note/c++/" class="nav-link">C++_Primer教程 </a></li><li class="dropdown-subitem"><a href="/note/cuda/" class="nav-link">CUDA编程 </a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="代码复现" class="dropdown-title"><a href="/ui/" class="link-title">代码复现</a> <span class="title" style="display:none;">代码复现</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/481dd8/" class="nav-link">Opencv</a></li><li class="dropdown-item"><!----> <a href="/pages/311868/" class="nav-link">CNN</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="技术" class="dropdown-title"><a href="/technology/" class="link-title">技术</a> <span class="title" style="display:none;">技术</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/9a7ee40fc232253e/" class="nav-link">技术文档</a></li><li class="dropdown-item"><!----> <a href="/pages/4c778760be26d8b3/" class="nav-link">GitHub技巧</a></li><li class="dropdown-item"><!----> <a href="/pages/117708e0af7f0bd9/" class="nav-link">Nodejs</a></li><li class="dropdown-item"><!----> <a href="/pages/41f87d890d0a02af/" class="nav-link">博客搭建</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="面试" class="dropdown-title"><a href="/interview/" class="link-title">面试</a> <span class="title" style="display:none;">面试</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>面试题库</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/58734d/" class="nav-link">HTML</a></li><li class="dropdown-subitem"><a href="/pages/26864d/" class="nav-link">CSS</a></li><li class="dropdown-subitem"><a href="/pages/ceea45/" class="nav-link">jQuery</a></li><li class="dropdown-subitem"><a href="/pages/4547e6/" class="nav-link">Vue</a></li><li class="dropdown-subitem"><a href="/pages/a134b2/" class="nav-link">零碎</a></li></ul></li><li class="dropdown-item"><h4>面试心得</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/331dbf/" class="nav-link">杂言碎语</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="读书派" class="dropdown-title"><a href="/bookssent/" class="link-title">读书派</a> <span class="title" style="display:none;">读书派</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>十架道路</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/7bb0fd/" class="nav-link">十架七言系列</a></li><li class="dropdown-subitem"><a href="/pages/3eb3b7/" class="nav-link">基督徒生活观</a></li><li class="dropdown-subitem"><a href="/pages/d02895/" class="nav-link">上帝的蓝图</a></li></ul></li><li class="dropdown-item"><h4>摘抄收录</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/ChickenSoup/" class="nav-link">☆ 励志鸡汤</a></li><li class="dropdown-subitem"><a href="/PassionLife/" class="nav-link">❀ 人间烟火</a></li></ul></li><li class="dropdown-item"><h4>读书笔记</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/note/xgqq/" class="nav-link">《小狗钱钱》</a></li><li class="dropdown-subitem"><a href="/note/qbbfbb/" class="nav-link">《穷爸爸富爸爸》</a></li><li class="dropdown-subitem"><a href="/note/cmrsyfgbjb/" class="nav-link">《聪明人使用方格笔记本》</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="更多" class="dropdown-title"><a href="/more/" class="link-title">更多</a> <span class="title" style="display:none;">更多</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/f2a556/" class="nav-link">学习</a></li><li class="dropdown-item"><!----> <a href="/pages/aea6571b7a8bae86/" class="nav-link">面试</a></li><li class="dropdown-item"><!----> <a href="/pages/2d615df9a36a98ed/" class="nav-link">心情杂货</a></li><li class="dropdown-item"><!----> <a href="/friends/" class="nav-link">友情链接</a></li></ul></div></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="收藏" class="dropdown-title"><a href="/pages/beb6c0bd8a66cea6/" class="link-title">收藏</a> <span class="title" style="display:none;">收藏</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/beb6c0bd8a66cea6/" class="nav-link">网站</a></li><li class="dropdown-item"><!----> <a href="/pages/eee83a9211a70f9d/" class="nav-link">资源</a></li><li class="dropdown-item"><!----> <a href="/pages/12df8ace52d493f6/" class="nav-link">Vue资源</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://github.com/kongenen/kongenen.github.io" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar-hover-trigger"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="https://s2.loli.net/2024/03/20/qR7JtYlAgKBsZXw.jpg"> <div class="blogger-info"><h3>Kongen</h3> <span>你好呀(✪ω✪)</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/navigation/" class="nav-link">导航站</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="机器视觉" class="dropdown-title"><a href="/web/" class="link-title">机器视觉</a> <span class="title" style="display:none;">机器视觉</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>学习教程</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/note/opencv/" class="nav-link">Opencv教程</a></li><li class="dropdown-subitem"><a href="/note/c++base/" class="nav-link">C++基础教程</a></li><li class="dropdown-subitem"><a href="/note/c++/" class="nav-link">C++_Primer教程 </a></li><li class="dropdown-subitem"><a href="/note/cuda/" class="nav-link">CUDA编程 </a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="代码复现" class="dropdown-title"><a href="/ui/" class="link-title">代码复现</a> <span class="title" style="display:none;">代码复现</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/481dd8/" class="nav-link">Opencv</a></li><li class="dropdown-item"><!----> <a href="/pages/311868/" class="nav-link">CNN</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="技术" class="dropdown-title"><a href="/technology/" class="link-title">技术</a> <span class="title" style="display:none;">技术</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/9a7ee40fc232253e/" class="nav-link">技术文档</a></li><li class="dropdown-item"><!----> <a href="/pages/4c778760be26d8b3/" class="nav-link">GitHub技巧</a></li><li class="dropdown-item"><!----> <a href="/pages/117708e0af7f0bd9/" class="nav-link">Nodejs</a></li><li class="dropdown-item"><!----> <a href="/pages/41f87d890d0a02af/" class="nav-link">博客搭建</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="面试" class="dropdown-title"><a href="/interview/" class="link-title">面试</a> <span class="title" style="display:none;">面试</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>面试题库</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/58734d/" class="nav-link">HTML</a></li><li class="dropdown-subitem"><a href="/pages/26864d/" class="nav-link">CSS</a></li><li class="dropdown-subitem"><a href="/pages/ceea45/" class="nav-link">jQuery</a></li><li class="dropdown-subitem"><a href="/pages/4547e6/" class="nav-link">Vue</a></li><li class="dropdown-subitem"><a href="/pages/a134b2/" class="nav-link">零碎</a></li></ul></li><li class="dropdown-item"><h4>面试心得</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/331dbf/" class="nav-link">杂言碎语</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="读书派" class="dropdown-title"><a href="/bookssent/" class="link-title">读书派</a> <span class="title" style="display:none;">读书派</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>十架道路</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/pages/7bb0fd/" class="nav-link">十架七言系列</a></li><li class="dropdown-subitem"><a href="/pages/3eb3b7/" class="nav-link">基督徒生活观</a></li><li class="dropdown-subitem"><a href="/pages/d02895/" class="nav-link">上帝的蓝图</a></li></ul></li><li class="dropdown-item"><h4>摘抄收录</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/ChickenSoup/" class="nav-link">☆ 励志鸡汤</a></li><li class="dropdown-subitem"><a href="/PassionLife/" class="nav-link">❀ 人间烟火</a></li></ul></li><li class="dropdown-item"><h4>读书笔记</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/note/xgqq/" class="nav-link">《小狗钱钱》</a></li><li class="dropdown-subitem"><a href="/note/qbbfbb/" class="nav-link">《穷爸爸富爸爸》</a></li><li class="dropdown-subitem"><a href="/note/cmrsyfgbjb/" class="nav-link">《聪明人使用方格笔记本》</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="更多" class="dropdown-title"><a href="/more/" class="link-title">更多</a> <span class="title" style="display:none;">更多</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/f2a556/" class="nav-link">学习</a></li><li class="dropdown-item"><!----> <a href="/pages/aea6571b7a8bae86/" class="nav-link">面试</a></li><li class="dropdown-item"><!----> <a href="/pages/2d615df9a36a98ed/" class="nav-link">心情杂货</a></li><li class="dropdown-item"><!----> <a href="/friends/" class="nav-link">友情链接</a></li></ul></div></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="收藏" class="dropdown-title"><a href="/pages/beb6c0bd8a66cea6/" class="link-title">收藏</a> <span class="title" style="display:none;">收藏</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/pages/beb6c0bd8a66cea6/" class="nav-link">网站</a></li><li class="dropdown-item"><!----> <a href="/pages/eee83a9211a70f9d/" class="nav-link">资源</a></li><li class="dropdown-item"><!----> <a href="/pages/12df8ace52d493f6/" class="nav-link">Vue资源</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://github.com/kongenen/kongenen.github.io" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>教程</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Transformer</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>CNN</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>模型部署</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/82feee/" class="sidebar-link">路面分割-车道线条检测-深度估计模型python-onnx部署记录</a></li><li><a href="/pages/6baee7/" aria-current="page" class="active sidebar-link">【模型c++部署】yolov8（检测、分类、分割、姿态）使用openvino进行部署</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header level2"><a href="/pages/6baee7/#_0-模型准备" class="sidebar-link">0\. 模型准备</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header level3"><a href="/pages/6baee7/#方法一-使用这种-由于版本不一致-推理失败" class="sidebar-link">方法一：（使用这种，由于版本不一致，推理失败）</a></li><li class="sidebar-sub-header level3"><a href="/pages/6baee7/#方法二" class="sidebar-link">方法二：</a></li><li class="sidebar-sub-header level3"><a href="/pages/6baee7/#方法三-推荐这种" class="sidebar-link">方法三：（推荐这种）</a></li></ul></li><li class="sidebar-sub-header level2"><a href="/pages/6baee7/#_1-ov-yolov8-dll" class="sidebar-link">1\. OV_YOLOV8_DLL</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header level3"><a href="/pages/6baee7/#_0-c-依赖项配置" class="sidebar-link">0\. c++依赖项配置</a></li><li class="sidebar-sub-header level3"><a href="/pages/6baee7/#_1-ov-yolov8-cpp" class="sidebar-link">1\. ov_yolov8.cpp</a></li><li class="sidebar-sub-header level3"><a href="/pages/6baee7/#_1-2-ov-yolov8-h" class="sidebar-link">1.2 ov_yolov8.h</a></li></ul></li><li class="sidebar-sub-header level2"><a href="/pages/6baee7/#_2-batch-test" class="sidebar-link">2.Batch_Test</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header level3"><a href="/pages/6baee7/#_2-1-batch-test-cpp" class="sidebar-link">2.1 Batch_Test.cpp</a></li></ul></li><li class="sidebar-sub-header level2"><a href="/pages/6baee7/#_3-完整工程" class="sidebar-link">3\. 完整工程</a></li></ul></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>JavaScript文章</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Vue文章</span> <span class="arrow right"></span></p> <!----></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-7828333725993554"
+            data-ad-slot="3508773082"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-06225672><div class="articleInfo" data-v-06225672><ul class="breadcrumbs" data-v-06225672><li data-v-06225672><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-06225672></a></li> <li data-v-06225672><a href="/web/#机器视觉" data-v-06225672>机器视觉</a></li><li data-v-06225672><a href="/web/#模型部署" data-v-06225672>模型部署</a></li></ul> <div class="info" data-v-06225672><div title="作者" class="author iconfont icon-touxiang" data-v-06225672><a href="https://github.com/kongenen" target="_blank" title="作者" class="beLink" data-v-06225672>kongen</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-06225672><a href="javascript:;" data-v-06225672>2024-03-23</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-title">目录</div> <div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABH1JREFUSA3tVl1oHFUUPmdmd2ltklqbpJDiNnXFmgbFktho7YMPNiJSSZM0+CAYSkUELVhM6YuwIPpgoOKDqOBDC0XE2CQoNtQXBUFTTcCi+Wlh1V2TQExsUzcltd3M9Tt3ZjZzZ2fT+OJTL8yeM+eee757fmeJbq//KQL8X3DUSFOcfr7cRsRtxNQMWueeVzOkaITIGqQHNg5y8+jNW9ldM7A6nTpAjuolUikAwq7CE3WcM2RRDz+XGVgN3FptU/aUSlvq9Pa3iZ1+sgAqJyyAFqkipd9dqiwHF3P65YycLWc/6sqGrvoEoIp6DOFaX5h6+dnfjkWprwqsPk0dUGq5vySwDImC10KxFHgGL1SWoc92O3eVht09qdXNH11I2SsTsJYqMWzihqGMi+A+Garf3BAuuLI5oGlULyNfyB/HYNujwktOfRrMr5t77NmevqaUopx0grnKAyvVpmwUDB4x6FPXuGvYLTDwWsejwgtgkYKPqRJg8SV6xaiZ3ZTppGneS4yfH5/66fZSDHv+QZci/+h5c5UHtpy67JUqGppM0sh0Nc1dW6/N1W5Yoqat8/TU/VnadmdeW2PLLSyh0cvxBs3KbqTmwYPpxN4do/mzE8nEpvX/UMu2Wbp74zUAK5q6WkHns7V0eWkdPbPzd3rxkTGybadYySumVzhcaJFbs5UrEkQ/+CK8gF5dnh/6ciIZ73gwQ927L1IitoxKLXYP3SjYdOrHHfTZhRRlFyrorafPk20B3HPD1y2G3qKZME5Jcf3t/HUC13/8tSd++vqFveMUTwAUxSUFI1QekR1+bIze3D9MF2aq6cPvG72CgnldWCFqyRw3lwH8ZMerjTD9ElRO7Gv44wNpC90aASqGfVlz/Rx17srQ57/UU26hkhQqUB7dBR71WmzQhHUnblGmVOEw0jhbV1n9OlXUDCIRGaNV5Jp43N516fN7JmnTHdfp7Hgy0luO4aMhtkLL8Bi3bUWYvzh5Mn1dTxrL6QmGuRhGL/TiTTxRoEdTszSaq9GR0NGA3KdkOz3hqSV3MIDhQ5IVX/Ivx3umBti2es2h4eZby7x8br1rkf7Mo90AqC8aQ3sJeNzqFRu+vSANAQe3PL7l0HGOAdwDCeZYvNKeoZp1Qfs6Aipndh86HmFRi0LAnEO47wsqM6cdfjh3jBPUzhZy7nvlUfFsamED1VQt6aISHVymXZ/B2aCtIG8AI8xfobj2d3en1wWVhOeHELKmLQ1s211s88comkv4UCwWyF787mJdYXtNfhKAXVqnKTq8QZvGAGGOfaTo5pGZ/PwbUCr5+DPr/1J92JNHr9aOl/F3iI5+O1nfybsGxoimvZ3ViWSluDITw3P37mypheDIPY0tw7+O/5ApbkYw+zpfaUVu32Pi98+defdUhEpZkRFq0aqyNh9FuL9hpYbEm6iwi0z2REd09ZmyENEbuhjDWzKvZXTqKYaBIr3tt5kuPtQBZFvEUwHt60vfCNu41XsksH9Ij1BMMz1Y0OOunHNShFIP5868g5zeXmuLwL9T4b6Q2+KejgAAAABJRU5ErkJggg==">【模型c++部署】yolov8（检测、分类、分割、姿态）使用openvino进行部署<!----></h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+       <ins class="adsbygoogle"
+            style="display:inline-block;width:100%;max-height:90px"
+            data-ad-client="ca-pub-7828333725993554"
+            data-ad-slot="6625304284"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script></div> <div class="theme-vdoing-content content__default"><blockquote><p>该文主要是对yolov8的检测、分类、分割、姿态应用使用c++进行dll封装，并进行调用测试。</p></blockquote> <h2 id="_0-模型准备"><a href="#_0-模型准备" class="header-anchor">#</a> 0. 模型准备</h2> <p>openvino调用的是xml和bin文件（下面的推理方式只需要调用xml的文件就行，另外一篇（<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/qq_44747572/article/details/134003776%3Fspm%3D1001.2014.3001.5501" target="_blank" rel="noopener noreferrer">链接<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>）使用xml和bin文件调用的）。 文件的获取过程（yolov8是pytorch训练的）： <strong>pt-&gt;onnx-&gt;openvino（xml和bin）</strong></p> <h3 id="方法一-使用这种-由于版本不一致-推理失败"><a href="#方法一-使用这种-由于版本不一致-推理失败" class="header-anchor">#</a> 方法一：（使用这种，由于版本不一致，推理失败）</h3> <p>使用yolov8自带的代码进行转换，这个过程比较方便，但是对于后续部署其他的模型不太方便。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>path = model.export(format=&quot;openvino&quot;)这行代码可以直接将yolov8n-pose.pt模型转换为xml和bin文件
+# 加载预训练模型
+    model = YOLO(&quot;yolov8n-pose.pt&quot;) 
+    #path = model.export(format=&quot;onnx&quot;)
+    path = model.export(format=&quot;openvino&quot;)
+    # model = YOLO(&quot;yolov8n.pt&quot;) task参数也可以不填写，它会根据模型去识别相应任务类别
+    # 检测图片
+    results = model(&quot;./ultralytics/assets/bus.jpg&quot;)
+    res = results[0].plot()
+    cv2.imshow(&quot;YOLOv8 Inference&quot;, res)
+    cv2.waitKey(0)
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><p><img src="https://pic4.zhimg.com/v2-6834398a16ddd42ae281a3f1a2f532ab_r.jpg" alt=""></p> <p>在这里插入图片描述</p> <h3 id="方法二"><a href="#方法二" class="header-anchor">#</a> 方法二：</h3> <ol><li>使用python的环境进行配置：<a href="https://link.zhihu.com/?target=https%3A//www.intel.cn/content/www/cn/zh/developer/tools/openvino-toolkit/download.html%3FVERSION%3Dv_2023_1_0%26OP_SYSTEM%3DWINDOWS%26DISTRIBUTION%3DPIP" target="_blank" rel="noopener noreferrer">pip下载方法<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ol> <p><img src="https://pic4.zhimg.com/v2-ac20f923504f97a0a0243804579d367b_r.jpg" alt=""></p> <p>在这里插入图片描述</p> <p><img src="https://pic4.zhimg.com/v2-b2fe90bed77301c48e3508115635b293_r.jpg" alt=""></p> <p>在这里插入图片描述</p> <p>主要就是：<code>pip install openvino==2023.1.0</code></p> <ol><li>使用代码行进行推理 在对应的环境库中找到mo_onnx.py，在终端切换路径到mo_onnx.py的路径下，然后再使用下面的命令。</li></ol> <div class="language- line-numbers-mode"><pre class="language-text"><code>python mo_onnx.py --input_model D:\Users\6536\Desktop\python\onnx2openvino\yolov8n.onnx --output_dir D:\Users\6536\Desktop\python\onnx2openvino
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><h3 id="方法三-推荐这种"><a href="#方法三-推荐这种" class="header-anchor">#</a> 方法三：（推荐这种）</h3> <p><a href="https://zhuanlan.zhihu.com/p/358437476" target="_blank" rel="noopener noreferrer">https://zhuanlan.zhihu.com/p/358437476<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <h2 id="_1-ov-yolov8-dll"><a href="#_1-ov-yolov8-dll" class="header-anchor">#</a> 1. OV_YOLOV8_DLL</h2> <p><img src="https://pic2.zhimg.com/v2-6ac377d205a511990af1afa550b2f8f1_r.jpg" alt=""></p> <p>在这里插入图片描述</p> <h3 id="_0-c-依赖项配置"><a href="#_0-c-依赖项配置" class="header-anchor">#</a> 0. c++依赖项配置</h3> <p>主要配置opencv以及openvino openvino的配置：<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/qq_44747572/article/details/134003776%3Fspm%3D1001.2014.3001.5501" target="_blank" rel="noopener noreferrer">链接<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> 所以配置截图：</p> <p><img src="https://pic2.zhimg.com/v2-b6af8b513c8c07ce759d66a9e9e5b461_r.jpg" alt=""></p> <p>在这里插入图片描述</p> <p><img src="https://pic1.zhimg.com/v2-2a71c5a170769e32823bad401cfe1490_r.jpg" alt=""></p> <p>在这里插入图片描述</p> <p><img src="https://pic1.zhimg.com/v2-bc916a159810b91441618235db7afda0_r.jpg" alt=""></p> <p>在这里插入图片描述</p> <p><img src="https://pic4.zhimg.com/v2-3a3bc9be8a0a24a25d112f63165297cf_r.jpg" alt=""></p> <p>在这里插入图片描述</p> <h3 id="_1-ov-yolov8-cpp"><a href="#_1-ov-yolov8-cpp" class="header-anchor">#</a> 1. ov_yolov8.cpp</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>#include &quot;ov_yolov8.h&quot;
+
+// 全局变量
+std::vector&lt;cv::Scalar&gt; colors = { cv::Scalar(0, 0, 255) , cv::Scalar(0, 255, 0) , cv::Scalar(255, 0, 0) ,
+                               cv::Scalar(255, 100, 50) , cv::Scalar(50, 100, 255) , cv::Scalar(255, 50, 100) };
+
+std::vector&lt;Scalar&gt; colors_seg = { Scalar(255, 0, 0), Scalar(255, 0, 255), Scalar(170, 0, 255), Scalar(255, 0, 85),
+                                   Scalar(255, 0, 170), Scalar(85, 255, 0), Scalar(255, 170, 0), Scalar(0, 255, 0),
+                                   Scalar(255, 255, 0), Scalar(0, 255, 85), Scalar(170, 255, 0), Scalar(0, 85, 255),
+                                   Scalar(0, 255, 170), Scalar(0, 0, 255), Scalar(0, 255, 255), Scalar(85, 0, 255) };
+
+// 定义skeleton的连接关系以及color mappings
+std::vector&lt;std::vector&lt;int&gt;&gt; skeleton = { {16, 14}, {14, 12}, {17, 15}, {15, 13}, {12, 13}, {6, 12}, {7, 13}, {6, 7},
+                                          {6, 8}, {7, 9}, {8, 10}, {9, 11}, {2, 3}, {1, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 6}, {5, 7} };
+
+std::vector&lt;cv::Scalar&gt; posePalette = {
+        cv::Scalar(255, 128, 0), cv::Scalar(255, 153, 51), cv::Scalar(255, 178, 102), cv::Scalar(230, 230, 0), cv::Scalar(255, 153, 255),
+        cv::Scalar(153, 204, 255), cv::Scalar(255, 102, 255), cv::Scalar(255, 51, 255), cv::Scalar(102, 178, 255), cv::Scalar(51, 153, 255),
+        cv::Scalar(255, 153, 153), cv::Scalar(255, 102, 102), cv::Scalar(255, 51, 51), cv::Scalar(153, 255, 153), cv::Scalar(102, 255, 102),
+        cv::Scalar(51, 255, 51), cv::Scalar(0, 255, 0), cv::Scalar(0, 0, 255), cv::Scalar(255, 0, 0), cv::Scalar(255, 255, 255)
+};
+
+std::vector&lt;int&gt; limbColorIndices = { 9, 9, 9, 9, 7, 7, 7, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16 };
+std::vector&lt;int&gt; kptColorIndices = { 16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9 };
+
+const std::vector&lt;std::string&gt; class_names = {
+    &quot;person&quot;, &quot;bicycle&quot;, &quot;car&quot;, &quot;motorcycle&quot;, &quot;airplane&quot;, &quot;bus&quot;, &quot;train&quot;, &quot;truck&quot;, &quot;boat&quot;, &quot;traffic light&quot;,
+    &quot;fire hydrant&quot;, &quot;stop sign&quot;, &quot;parking meter&quot;, &quot;bench&quot;, &quot;bird&quot;, &quot;cat&quot;, &quot;dog&quot;, &quot;horse&quot;, &quot;sheep&quot;, &quot;cow&quot;,
+    &quot;elephant&quot;, &quot;bear&quot;, &quot;zebra&quot;, &quot;giraffe&quot;, &quot;backpack&quot;, &quot;umbrella&quot;, &quot;handbag&quot;, &quot;tie&quot;, &quot;suitcase&quot;, &quot;frisbee&quot;,
+    &quot;skis&quot;, &quot;snowboard&quot;, &quot;sports ball&quot;, &quot;kite&quot;, &quot;baseball bat&quot;, &quot;baseball glove&quot;, &quot;skateboard&quot;, &quot;surfboard&quot;,
+    &quot;tennis racket&quot;, &quot;bottle&quot;, &quot;wine glass&quot;, &quot;cup&quot;, &quot;fork&quot;, &quot;knife&quot;, &quot;spoon&quot;, &quot;bowl&quot;, &quot;banana&quot;, &quot;apple&quot;,
+    &quot;sandwich&quot;, &quot;orange&quot;, &quot;broccoli&quot;, &quot;carrot&quot;, &quot;hot dog&quot;, &quot;pizza&quot;, &quot;donut&quot;, &quot;cake&quot;, &quot;chair&quot;, &quot;couch&quot;,
+    &quot;potted plant&quot;, &quot;bed&quot;, &quot;dining table&quot;, &quot;toilet&quot;, &quot;tv&quot;, &quot;laptop&quot;, &quot;mouse&quot;, &quot;remote&quot;, &quot;keyboard&quot;, &quot;cell phone&quot;,
+    &quot;microwave&quot;, &quot;oven&quot;, &quot;toaster&quot;, &quot;sink&quot;, &quot;refrigerator&quot;, &quot;book&quot;, &quot;clock&quot;, &quot;vase&quot;, &quot;scissors&quot;, &quot;teddy bear&quot;,
+    &quot;hair drier&quot;, &quot;toothbrush&quot; };
+
+YoloModel::YoloModel()
+{
+
+}
+YoloModel::~YoloModel()
+{
+
+}
+
+// =====================检测========================//
+bool YoloModel::LoadDetectModel(const string&amp; xmlName, string&amp; device)
+{
+    //待优化，如何把初始化部分进行提取出来
+   // -------- Step 1. Initialize OpenVINO Runtime Core --------
+    ov::Core core;
+
+    // -------- Step 2. Compile the Model --------
+    compiled_model_Detect = core.compile_model(xmlName, device);
+
+    // -------- Step 3. Create an Inference Request --------
+    infer_request_Detect = compiled_model_Detect.create_infer_request();
+
+    return true;
+}
+
+bool YoloModel::YoloDetectInfer(const Mat&amp; src, double cof_threshold, double nms_area_threshold, Mat&amp; dst, vector&lt;Object&gt;&amp; vecObj)
+{
+    // -------- Step 4.Read a picture file and do the preprocess --------
+    // Preprocess the image
+    Mat letterbox_img;
+    letterbox(src, letterbox_img);
+    float scale = letterbox_img.size[0] / 640.0;
+    Mat blob = blobFromImage(letterbox_img, 1.0 / 255.0, Size(640, 640), Scalar(), true);
+
+    // -------- Step 5. Feed the blob into the input node of the Model -------
+    // Get input port for model with one input
+    auto input_port = compiled_model_Detect.input();
+    // Create tensor from external memory
+    ov::Tensor input_tensor(input_port.get_element_type(), input_port.get_shape(), blob.ptr(0));
+    // Set input tensor for model with one input
+    infer_request_Detect.set_input_tensor(input_tensor);
+    // -------- Step 6. Start inference --------
+    infer_request_Detect.infer();
+
+    // -------- Step 7. Get the inference result --------
+    auto output = infer_request_Detect.get_output_tensor(0);
+    auto output_shape = output.get_shape();
+    std::cout &lt;&lt; &quot;The shape of output tensor:&quot; &lt;&lt; output_shape &lt;&lt; std::endl;
+    int rows = output_shape[2];        //8400
+    int dimensions = output_shape[1];  //84: box[cx, cy, w, h]+80 classes scores
+
+    // -------- Step 8. Postprocess the result --------
+    float* data = output.data&lt;float&gt;();
+    Mat output_buffer(output_shape[1], output_shape[2], CV_32F, data);
+    transpose(output_buffer, output_buffer); //[8400,84]
+    float score_threshold = 0.25;
+    float nms_threshold = 0.5;
+    std::vector&lt;int&gt; class_ids;
+    std::vector&lt;float&gt; class_scores;
+    std::vector&lt;Rect&gt; boxes;
+
+    // Figure out the bbox, class_id and class_score
+    for (int i = 0; i &lt; output_buffer.rows; i++) {
+        Mat classes_scores = output_buffer.row(i).colRange(4, 84);
+        Point class_id;
+        double maxClassScore;
+        minMaxLoc(classes_scores, 0, &amp;maxClassScore, 0, &amp;class_id);
+
+        if (maxClassScore &gt; score_threshold) {
+            class_scores.push_back(maxClassScore);
+            class_ids.push_back(class_id.x);
+            float cx = output_buffer.at&lt;float&gt;(i, 0);
+            float cy = output_buffer.at&lt;float&gt;(i, 1);
+            float w = output_buffer.at&lt;float&gt;(i, 2);
+            float h = output_buffer.at&lt;float&gt;(i, 3);
+
+            int left = int((cx - 0.5 * w) * scale);
+            int top = int((cy - 0.5 * h) * scale);
+            int width = int(w * scale);
+            int height = int(h * scale);
+
+            boxes.push_back(Rect(left, top, width, height));
+        }
+    }
+    //NMS
+    std::vector&lt;int&gt; indices;
+    NMSBoxes(boxes, class_scores, score_threshold, nms_threshold, indices);
+
+    // -------- Visualize the detection results -----------
+    dst = src.clone();
+    for (size_t i = 0; i &lt; indices.size(); i++) {
+        int index = indices[i];
+        int class_id = class_ids[index];
+        rectangle(dst, boxes[index], colors[class_id % 6], 2, 8);
+        std::string label = class_names[class_id] + &quot;:&quot; + std::to_string(class_scores[index]).substr(0, 4);
+        Size textSize = cv::getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, 0);
+        Rect textBox(boxes[index].tl().x, boxes[index].tl().y - 15, textSize.width, textSize.height + 5);
+        cv::rectangle(dst, textBox, colors[class_id % 6], FILLED);
+        putText(dst, label, Point(boxes[index].tl().x, boxes[index].tl().y - 5), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(255, 255, 255));
+    }
+
+    return true;
+}
+
+// =====================分类========================//
+bool YoloModel::LoadClsModel(const string&amp; xmlName, string&amp; device)
+{
+    //待优化，如何把初始化部分进行提取出来
+   // -------- Step 1. Initialize OpenVINO Runtime Core --------
+    ov::Core core;
+
+    // -------- Step 2. Compile the Model --------
+    compiled_model_Detect_Cls = core.compile_model(xmlName, device);
+
+    // -------- Step 3. Create an Inference Request --------
+    infer_request_Cls = compiled_model_Detect_Cls.create_infer_request();
+
+    return true;
+}
+
+bool YoloModel::YoloClsInfer(const Mat&amp; src, double cof_threshold, double nms_area_threshold, Mat&amp; dst, vector&lt;Object&gt;&amp; vecObj)
+{
+    // -------- Step 4.Read a picture file and do the preprocess --------
+    // Preprocess the image
+    Mat letterbox_img;
+    letterbox(src, letterbox_img);
+    float scale = letterbox_img.size[0] / 640.0;
+    Mat blob = blobFromImage(letterbox_img, 1.0 / 255.0, Size(224, 224), Scalar(), true);
+
+    // -------- Step 5. Feed the blob into the input node of the Model -------
+    // Get input port for model with one input
+    auto input_port = compiled_model_Detect_Cls.input();
+    // Create tensor from external memory
+    ov::Tensor input_tensor(input_port.get_element_type(), input_port.get_shape(), blob.ptr(0));
+    // Set input tensor for model with one input
+    infer_request_Cls.set_input_tensor(input_tensor);
+
+    // -------- Step 6. Start inference --------
+    infer_request_Cls.infer();
+
+    // -------- Step 7. Get the inference result --------
+    auto output = infer_request_Cls.get_output_tensor(0);
+    auto output_shape = output.get_shape();
+    std::cout &lt;&lt; &quot;The shape of output tensor:&quot; &lt;&lt; output_shape &lt;&lt; std::endl;
+
+    // -------- Step 8. Postprocess the result --------
+    float* output_buffer = output.data&lt;float&gt;();
+    std::vector&lt;float&gt; result(output_buffer, output_buffer + output_shape[1]);
+    auto max_idx = std::max_element(result.begin(), result.end());
+    int class_id = max_idx - result.begin();
+    float score = *max_idx;
+    std::cout &lt;&lt; &quot;Class ID:&quot; &lt;&lt; class_id &lt;&lt; &quot; Score:&quot; &lt;&lt; score &lt;&lt; std::endl;
+
+    return true;
+}
+
+// =====================分割========================//
+bool YoloModel::LoadSegModel(const string&amp; xmlName, string&amp; device)
+{
+    //待优化，如何把初始化部分进行提取出来
+   // -------- Step 1. Initialize OpenVINO Runtime Core --------
+    ov::Core core;
+
+    // -------- Step 2. Compile the Model --------
+    compiled_model_Seg = core.compile_model(xmlName, device);
+
+    // -------- Step 3. Create an Inference Request --------
+    infer_request_Seg = compiled_model_Seg.create_infer_request();
+
+    return true;
+}
+
+bool YoloModel::YoloSegInfer(const Mat&amp; src, double cof_threshold, double nms_area_threshold, Mat&amp; dst, vector&lt;Object&gt;&amp; vecObj)
+{
+    // -------- Step 4.Read a picture file and do the preprocess --------
+    // Preprocess the image
+    Mat letterbox_img;
+    letterbox(src, letterbox_img);
+    float scale = letterbox_img.size[0] / 640.0;
+    Mat blob = blobFromImage(letterbox_img, 1.0 / 255.0, Size(640, 640), Scalar(), true);
+
+    // -------- Step 5. Feed the blob into the input node of the Model -------
+    // Get input port for model with one input
+    auto input_port = compiled_model_Seg.input();
+    // Create tensor from external memory
+    ov::Tensor input_tensor(input_port.get_element_type(), input_port.get_shape(), blob.ptr(0));
+    // Set input tensor for model with one input
+    infer_request_Seg.set_input_tensor(input_tensor);
+
+    // -------- Step 6. Start inference --------
+    infer_request_Seg.infer();
+
+    // -------- Step 7. Get the inference result --------
+    auto output0 = infer_request_Seg.get_output_tensor(0); //output0
+    auto output1 = infer_request_Seg.get_output_tensor(1); //otuput1
+    auto output0_shape = output0.get_shape();
+    auto output1_shape = output1.get_shape();
+    std::cout &lt;&lt; &quot;The shape of output0:&quot; &lt;&lt; output0_shape &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;The shape of output1:&quot; &lt;&lt; output1_shape &lt;&lt; std::endl;
+
+    // -------- Step 8. Postprocess the result --------
+    Mat output_buffer(output1_shape[1], output1_shape[2], CV_32F, output1.data&lt;float&gt;());    // output_buffer 0:x 1:y  2 : w 3 : h   4--84 : class score  85--116 : mask pos
+    Mat proto(32, 25600, CV_32F, output0.data&lt;float&gt;()); //[32,25600] 1 32 160 160
+    transpose(output_buffer, output_buffer); //[8400,116]
+    std::vector&lt;int&gt; class_ids;
+    std::vector&lt;float&gt; class_scores;
+    std::vector&lt;Rect&gt; boxes;
+    std::vector&lt;Mat&gt; mask_confs;
+    // Figure out the bbox, class_id and class_score
+    for (int i = 0; i &lt; output_buffer.rows; i++) {
+        Mat classes_scores = output_buffer.row(i).colRange(4, 84);
+        Point class_id;
+        double maxClassScore;
+        minMaxLoc(classes_scores, 0, &amp;maxClassScore, 0, &amp;class_id);
+
+        if (maxClassScore &gt; cof_threshold) {
+            class_scores.push_back(maxClassScore);
+            class_ids.push_back(class_id.x);
+            float cx = output_buffer.at&lt;float&gt;(i, 0);
+            float cy = output_buffer.at&lt;float&gt;(i, 1);
+            float w = output_buffer.at&lt;float&gt;(i, 2);
+            float h = output_buffer.at&lt;float&gt;(i, 3);
+
+            int left = int((cx - 0.5 * w) * scale);
+            int top = int((cy - 0.5 * h) * scale);
+            int width = int(w * scale);
+            int height = int(h * scale);
+
+            cv::Mat mask_conf = output_buffer.row(i).colRange(84, 116);
+            mask_confs.push_back(mask_conf);
+            boxes.push_back(Rect(left, top, width, height));
+        }
+    }
+    //NMS
+    std::vector&lt;int&gt; indices;
+    NMSBoxes(boxes, class_scores, cof_threshold, nms_area_threshold, indices);
+
+    // -------- Visualize the detection results -----------
+    cv::Mat rgb_mask = cv::Mat::zeros(src.size(), src.type());
+    cv::Mat masked_img;
+    cv::RNG rng;
+
+    Mat dst_temp = src.clone();
+    for (size_t i = 0; i &lt; indices.size(); i++) 
+    {
+        // Visualize the objects
+        int index = indices[i];
+        int class_id = class_ids[index];
+        rectangle(dst_temp, boxes[index], colors_seg[class_id % 16], 2, 8);
+        std::string label = class_names[class_id] + &quot;:&quot; + std::to_string(class_scores[index]).substr(0, 4);
+        Size textSize = cv::getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, 0);
+        Rect textBox(boxes[index].tl().x, boxes[index].tl().y - 15, textSize.width, textSize.height + 5);
+        cv::rectangle(dst_temp, textBox, colors_seg[class_id % 16], FILLED);
+        putText(dst_temp, label, Point(boxes[index].tl().x, boxes[index].tl().y - 5), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(255, 255, 255));
+
+        // Visualize the Masks
+        Mat m = mask_confs[i] * proto;
+        for (int col = 0; col &lt; m.cols; col++) {
+            sigmoid_function(m.at&lt;float&gt;(0, col), m.at&lt;float&gt;(0, col));
+        }
+        cv::Mat m1 = m.reshape(1, 160); // 1x25600 -&gt; 160x160
+        int x1 = std::max(0, boxes[index].x);
+        int y1 = std::max(0, boxes[index].y);
+        int x2 = std::max(0, boxes[index].br().x);
+        int y2 = std::max(0, boxes[index].br().y);
+        int mx1 = int(x1 / scale * 0.25);
+        int my1 = int(y1 / scale * 0.25);
+        int mx2 = int(x2 / scale * 0.25);
+        int my2 = int(y2 / scale * 0.25);
+
+        cv::Mat mask_roi = m1(cv::Range(my1, my2), cv::Range(mx1, mx2));
+        cv::Mat rm, det_mask;
+        cv::resize(mask_roi, rm, cv::Size(x2 - x1, y2 - y1));
+
+        for (int r = 0; r &lt; rm.rows; r++) {
+            for (int c = 0; c &lt; rm.cols; c++) {
+                float pv = rm.at&lt;float&gt;(r, c);
+                if (pv &gt; 0.5) {
+                    rm.at&lt;float&gt;(r, c) = 1.0;
+                }
+                else {
+                    rm.at&lt;float&gt;(r, c) = 0.0;
+                }
+            }
+        }
+        rm = rm * rng.uniform(0, 255);
+        rm.convertTo(det_mask, CV_8UC1);
+        if ((y1 + det_mask.rows) &gt;= dst_temp.rows) {
+            y2 = dst_temp.rows - 1;
+        }
+        if ((x1 + det_mask.cols) &gt;= dst_temp.cols) {
+            x2 = dst_temp.cols - 1;
+        }
+
+        cv::Mat mask = cv::Mat::zeros(cv::Size(dst_temp.cols, dst_temp.rows), CV_8UC1);
+        det_mask(cv::Range(0, y2 - y1), cv::Range(0, x2 - x1)).copyTo(mask(cv::Range(y1, y2), cv::Range(x1, x2)));
+        add(rgb_mask, cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255)), rgb_mask, mask);
+        addWeighted(dst_temp, 0.5, rgb_mask, 0.5, 0, masked_img);
+    }
+    dst = masked_img.clone();
+
+    return true;
+}
+
+// =====================姿态========================//
+bool YoloModel::LoadPoseModel(const string&amp; xmlName, string&amp; device)
+{
+    //待优化，如何把初始化部分进行提取出来
+   // -------- Step 1. Initialize OpenVINO Runtime Core --------
+    ov::Core core;
+
+    // -------- Step 2. Compile the Model --------
+    compiled_model_Pose = core.compile_model(xmlName, device);
+
+    // -------- Step 3. Create an Inference Request --------
+    infer_request_Pose = compiled_model_Pose.create_infer_request();
+
+    return true;
+}
+
+bool YoloModel::YoloPoseInfer(const Mat&amp; src, double cof_threshold, double nms_area_threshold, Mat&amp; dst, vector&lt;Object&gt;&amp; vecObj)
+{
+    // -------- Step 4.Read a picture file and do the preprocess --------
+    // Preprocess the image
+    Mat letterbox_img;
+    letterbox(src, letterbox_img);
+    float scale = letterbox_img.size[0] / 640.0;
+    Mat blob = blobFromImage(letterbox_img, 1.0 / 255.0, Size(640, 640), Scalar(), true);
+
+    // -------- Step 5. Feed the blob into the input node of the Model -------
+    // Get input port for model with one input
+    auto input_port = compiled_model_Pose.input();
+    // Create tensor from external memory
+    ov::Tensor input_tensor(input_port.get_element_type(), input_port.get_shape(), blob.ptr(0));
+    // Set input tensor for model with one input
+    infer_request_Pose.set_input_tensor(input_tensor);
+
+    // -------- Step 6. Start inference --------
+    infer_request_Pose.infer();
+
+    // -------- Step 7. Get the inference result --------
+    auto output = infer_request_Pose.get_output_tensor(0);
+    auto output_shape = output.get_shape();
+    std::cout &lt;&lt; &quot;The shape of output tensor:&quot; &lt;&lt; output_shape &lt;&lt; std::endl;
+
+    // -------- Step 8. Postprocess the result --------
+    float* data = output.data&lt;float&gt;();
+    Mat output_buffer(output_shape[1], output_shape[2], CV_32F, data);
+    transpose(output_buffer, output_buffer); //[8400,56]
+    std::vector&lt;int&gt; class_ids;
+    std::vector&lt;float&gt; class_scores;
+    std::vector&lt;Rect&gt; boxes;
+    std::vector&lt;std::vector&lt;float&gt;&gt; objects_keypoints;
+
+    // //56: box[cx, cy, w, h] + Score + [17,3] keypoints
+    for (int i = 0; i &lt; output_buffer.rows; i++) {
+        float class_score = output_buffer.at&lt;float&gt;(i, 4);
+
+        if (class_score &gt; cof_threshold) {
+            class_scores.push_back(class_score);
+            class_ids.push_back(0); //{0:&quot;person&quot;}
+            float cx = output_buffer.at&lt;float&gt;(i, 0);
+            float cy = output_buffer.at&lt;float&gt;(i, 1);
+            float w = output_buffer.at&lt;float&gt;(i, 2);
+            float h = output_buffer.at&lt;float&gt;(i, 3);
+            // Get the box
+            int left = int((cx - 0.5 * w) * scale);
+            int top = int((cy - 0.5 * h) * scale);
+            int width = int(w * scale);
+            int height = int(h * scale);
+            // Get the keypoints
+            std::vector&lt;float&gt; keypoints;
+            Mat kpts = output_buffer.row(i).colRange(5, 56);
+            for (int i = 0; i &lt; 17; i++) {
+                float x = kpts.at&lt;float&gt;(0, i * 3 + 0) * scale;
+                float y = kpts.at&lt;float&gt;(0, i * 3 + 1) * scale;
+                float s = kpts.at&lt;float&gt;(0, i * 3 + 2);
+                keypoints.push_back(x);
+                keypoints.push_back(y);
+                keypoints.push_back(s);
+            }
+
+            boxes.push_back(Rect(left, top, width, height));
+            objects_keypoints.push_back(keypoints);
+        }
+    }
+    //NMS
+    std::vector&lt;int&gt; indices;
+    NMSBoxes(boxes, class_scores, cof_threshold, nms_area_threshold, indices);
+
+    dst = src.clone();
+    // -------- Visualize the detection results -----------
+    for (size_t i = 0; i &lt; indices.size(); i++) {
+        int index = indices[i];
+        // Draw bounding box
+        rectangle(dst, boxes[index], Scalar(0, 0, 255), 2, 8);
+        std::string label = &quot;Person:&quot; + std::to_string(class_scores[index]).substr(0, 4);
+        Size textSize = cv::getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, 0);
+        Rect textBox(boxes[index].tl().x, boxes[index].tl().y - 15, textSize.width, textSize.height + 5);
+        cv::rectangle(dst, textBox, Scalar(0, 0, 255), FILLED);
+        putText(dst, label, Point(boxes[index].tl().x, boxes[index].tl().y - 5), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(255, 255, 255));
+        // Draw keypoints
+        //std::vector&lt;float&gt; object_keypoints = objects_keypoints[index];
+        //for (int i = 0; i &lt; 17; i++)
+        //{
+        //    int x = std::clamp(int(object_keypoints[i * 3 + 0]), 0, dst.cols);
+        //    int y = std::clamp(int(object_keypoints[i * 3 + 1]), 0, dst.rows);
+        //    //Draw point
+        //    circle(dst, Point(x, y), 5, posePalette[i], -1);
+        //}
+        // Draw keypoints-line
+    }
+    cv::Size shape = dst.size();
+    plot_keypoints(dst, objects_keypoints, shape);
+    return true;
+}
+
+void YoloModel::letterbox(const cv::Mat&amp; source, cv::Mat&amp; result)
+{
+    int col = source.cols;
+    int row = source.rows;
+    int _max = MAX(col, row);
+    result = Mat::zeros(_max, _max, CV_8UC3);
+    source.copyTo(result(Rect(0, 0, col, row)));
+}
+
+void YoloModel::sigmoid_function(float a, float&amp; b) 
+{
+    b = 1. / (1. + exp(-a));
+}
+
+void YoloModel::plot_keypoints(cv::Mat&amp; image, const std::vector&lt;std::vector&lt;float&gt;&gt;&amp; keypoints, const cv::Size&amp; shape)
+{
+
+    int radius = 5;
+    bool drawLines = true;
+
+    if (keypoints.empty()) {
+        return;
+    }
+
+    std::vector&lt;cv::Scalar&gt; limbColorPalette;
+    std::vector&lt;cv::Scalar&gt; kptColorPalette;
+
+    for (int index : limbColorIndices) {
+        limbColorPalette.push_back(posePalette[index]);
+    }
+
+    for (int index : kptColorIndices) {
+        kptColorPalette.push_back(posePalette[index]);
+    }
+
+    for (const auto&amp; keypoint : keypoints) {
+        bool isPose = keypoint.size() == 51;  // numKeypoints == 17 &amp;&amp; keypoints[0].size() == 3;
+        drawLines &amp;= isPose;
+
+        // draw points
+        for (int i = 0; i &lt; 17; i++) {
+            int idx = i * 3;
+            int x_coord = static_cast&lt;int&gt;(keypoint[idx]);
+            int y_coord = static_cast&lt;int&gt;(keypoint[idx + 1]);
+
+            if (x_coord % shape.width != 0 &amp;&amp; y_coord % shape.height != 0) {
+                if (keypoint.size() == 3) {
+                    float conf = keypoint[2];
+                    if (conf &lt; 0.5) {
+                        continue;
+                    }
+                }
+                cv::Scalar color_k = isPose ? kptColorPalette[i] : cv::Scalar(0, 0,
+                    255);  // Default to red if not in pose mode
+                cv::circle(image, cv::Point(x_coord, y_coord), radius, color_k, -1, cv::LINE_AA);
+            }
+        }
+        // draw lines
+        if (drawLines) {
+            for (int i = 0; i &lt; skeleton.size(); i++) {
+                const std::vector&lt;int&gt;&amp; sk = skeleton[i];
+                int idx1 = sk[0] - 1;
+                int idx2 = sk[1] - 1;
+
+                int idx1_x_pos = idx1 * 3;
+                int idx2_x_pos = idx2 * 3;
+
+                int x1 = static_cast&lt;int&gt;(keypoint[idx1_x_pos]);
+                int y1 = static_cast&lt;int&gt;(keypoint[idx1_x_pos + 1]);
+                int x2 = static_cast&lt;int&gt;(keypoint[idx2_x_pos]);
+                int y2 = static_cast&lt;int&gt;(keypoint[idx2_x_pos + 1]);
+
+                float conf1 = keypoint[idx1_x_pos + 2];
+                float conf2 = keypoint[idx2_x_pos + 2];
+
+                // Check confidence thresholds
+                if (conf1 &lt; 0.5 || conf2 &lt; 0.5) {
+                    continue;
+                }
+
+                // Check if positions are within bounds
+                if (x1 % shape.width == 0 || y1 % shape.height == 0 || x1 &lt; 0 || y1 &lt; 0 ||
+                    x2 % shape.width == 0 || y2 % shape.height == 0 || x2 &lt; 0 || y2 &lt; 0) {
+                    continue;
+                }
+
+                // Draw a line between keypoints
+                cv::Scalar color_limb = limbColorPalette[i];
+                cv::line(image, cv::Point(x1, y1), cv::Point(x2, y2), color_limb, 2, cv::LINE_AA);
+            }
+        }
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br><span class="line-number">125</span><br><span class="line-number">126</span><br><span class="line-number">127</span><br><span class="line-number">128</span><br><span class="line-number">129</span><br><span class="line-number">130</span><br><span class="line-number">131</span><br><span class="line-number">132</span><br><span class="line-number">133</span><br><span class="line-number">134</span><br><span class="line-number">135</span><br><span class="line-number">136</span><br><span class="line-number">137</span><br><span class="line-number">138</span><br><span class="line-number">139</span><br><span class="line-number">140</span><br><span class="line-number">141</span><br><span class="line-number">142</span><br><span class="line-number">143</span><br><span class="line-number">144</span><br><span class="line-number">145</span><br><span class="line-number">146</span><br><span class="line-number">147</span><br><span class="line-number">148</span><br><span class="line-number">149</span><br><span class="line-number">150</span><br><span class="line-number">151</span><br><span class="line-number">152</span><br><span class="line-number">153</span><br><span class="line-number">154</span><br><span class="line-number">155</span><br><span class="line-number">156</span><br><span class="line-number">157</span><br><span class="line-number">158</span><br><span class="line-number">159</span><br><span class="line-number">160</span><br><span class="line-number">161</span><br><span class="line-number">162</span><br><span class="line-number">163</span><br><span class="line-number">164</span><br><span class="line-number">165</span><br><span class="line-number">166</span><br><span class="line-number">167</span><br><span class="line-number">168</span><br><span class="line-number">169</span><br><span class="line-number">170</span><br><span class="line-number">171</span><br><span class="line-number">172</span><br><span class="line-number">173</span><br><span class="line-number">174</span><br><span class="line-number">175</span><br><span class="line-number">176</span><br><span class="line-number">177</span><br><span class="line-number">178</span><br><span class="line-number">179</span><br><span class="line-number">180</span><br><span class="line-number">181</span><br><span class="line-number">182</span><br><span class="line-number">183</span><br><span class="line-number">184</span><br><span class="line-number">185</span><br><span class="line-number">186</span><br><span class="line-number">187</span><br><span class="line-number">188</span><br><span class="line-number">189</span><br><span class="line-number">190</span><br><span class="line-number">191</span><br><span class="line-number">192</span><br><span class="line-number">193</span><br><span class="line-number">194</span><br><span class="line-number">195</span><br><span class="line-number">196</span><br><span class="line-number">197</span><br><span class="line-number">198</span><br><span class="line-number">199</span><br><span class="line-number">200</span><br><span class="line-number">201</span><br><span class="line-number">202</span><br><span class="line-number">203</span><br><span class="line-number">204</span><br><span class="line-number">205</span><br><span class="line-number">206</span><br><span class="line-number">207</span><br><span class="line-number">208</span><br><span class="line-number">209</span><br><span class="line-number">210</span><br><span class="line-number">211</span><br><span class="line-number">212</span><br><span class="line-number">213</span><br><span class="line-number">214</span><br><span class="line-number">215</span><br><span class="line-number">216</span><br><span class="line-number">217</span><br><span class="line-number">218</span><br><span class="line-number">219</span><br><span class="line-number">220</span><br><span class="line-number">221</span><br><span class="line-number">222</span><br><span class="line-number">223</span><br><span class="line-number">224</span><br><span class="line-number">225</span><br><span class="line-number">226</span><br><span class="line-number">227</span><br><span class="line-number">228</span><br><span class="line-number">229</span><br><span class="line-number">230</span><br><span class="line-number">231</span><br><span class="line-number">232</span><br><span class="line-number">233</span><br><span class="line-number">234</span><br><span class="line-number">235</span><br><span class="line-number">236</span><br><span class="line-number">237</span><br><span class="line-number">238</span><br><span class="line-number">239</span><br><span class="line-number">240</span><br><span class="line-number">241</span><br><span class="line-number">242</span><br><span class="line-number">243</span><br><span class="line-number">244</span><br><span class="line-number">245</span><br><span class="line-number">246</span><br><span class="line-number">247</span><br><span class="line-number">248</span><br><span class="line-number">249</span><br><span class="line-number">250</span><br><span class="line-number">251</span><br><span class="line-number">252</span><br><span class="line-number">253</span><br><span class="line-number">254</span><br><span class="line-number">255</span><br><span class="line-number">256</span><br><span class="line-number">257</span><br><span class="line-number">258</span><br><span class="line-number">259</span><br><span class="line-number">260</span><br><span class="line-number">261</span><br><span class="line-number">262</span><br><span class="line-number">263</span><br><span class="line-number">264</span><br><span class="line-number">265</span><br><span class="line-number">266</span><br><span class="line-number">267</span><br><span class="line-number">268</span><br><span class="line-number">269</span><br><span class="line-number">270</span><br><span class="line-number">271</span><br><span class="line-number">272</span><br><span class="line-number">273</span><br><span class="line-number">274</span><br><span class="line-number">275</span><br><span class="line-number">276</span><br><span class="line-number">277</span><br><span class="line-number">278</span><br><span class="line-number">279</span><br><span class="line-number">280</span><br><span class="line-number">281</span><br><span class="line-number">282</span><br><span class="line-number">283</span><br><span class="line-number">284</span><br><span class="line-number">285</span><br><span class="line-number">286</span><br><span class="line-number">287</span><br><span class="line-number">288</span><br><span class="line-number">289</span><br><span class="line-number">290</span><br><span class="line-number">291</span><br><span class="line-number">292</span><br><span class="line-number">293</span><br><span class="line-number">294</span><br><span class="line-number">295</span><br><span class="line-number">296</span><br><span class="line-number">297</span><br><span class="line-number">298</span><br><span class="line-number">299</span><br><span class="line-number">300</span><br><span class="line-number">301</span><br><span class="line-number">302</span><br><span class="line-number">303</span><br><span class="line-number">304</span><br><span class="line-number">305</span><br><span class="line-number">306</span><br><span class="line-number">307</span><br><span class="line-number">308</span><br><span class="line-number">309</span><br><span class="line-number">310</span><br><span class="line-number">311</span><br><span class="line-number">312</span><br><span class="line-number">313</span><br><span class="line-number">314</span><br><span class="line-number">315</span><br><span class="line-number">316</span><br><span class="line-number">317</span><br><span class="line-number">318</span><br><span class="line-number">319</span><br><span class="line-number">320</span><br><span class="line-number">321</span><br><span class="line-number">322</span><br><span class="line-number">323</span><br><span class="line-number">324</span><br><span class="line-number">325</span><br><span class="line-number">326</span><br><span class="line-number">327</span><br><span class="line-number">328</span><br><span class="line-number">329</span><br><span class="line-number">330</span><br><span class="line-number">331</span><br><span class="line-number">332</span><br><span class="line-number">333</span><br><span class="line-number">334</span><br><span class="line-number">335</span><br><span class="line-number">336</span><br><span class="line-number">337</span><br><span class="line-number">338</span><br><span class="line-number">339</span><br><span class="line-number">340</span><br><span class="line-number">341</span><br><span class="line-number">342</span><br><span class="line-number">343</span><br><span class="line-number">344</span><br><span class="line-number">345</span><br><span class="line-number">346</span><br><span class="line-number">347</span><br><span class="line-number">348</span><br><span class="line-number">349</span><br><span class="line-number">350</span><br><span class="line-number">351</span><br><span class="line-number">352</span><br><span class="line-number">353</span><br><span class="line-number">354</span><br><span class="line-number">355</span><br><span class="line-number">356</span><br><span class="line-number">357</span><br><span class="line-number">358</span><br><span class="line-number">359</span><br><span class="line-number">360</span><br><span class="line-number">361</span><br><span class="line-number">362</span><br><span class="line-number">363</span><br><span class="line-number">364</span><br><span class="line-number">365</span><br><span class="line-number">366</span><br><span class="line-number">367</span><br><span class="line-number">368</span><br><span class="line-number">369</span><br><span class="line-number">370</span><br><span class="line-number">371</span><br><span class="line-number">372</span><br><span class="line-number">373</span><br><span class="line-number">374</span><br><span class="line-number">375</span><br><span class="line-number">376</span><br><span class="line-number">377</span><br><span class="line-number">378</span><br><span class="line-number">379</span><br><span class="line-number">380</span><br><span class="line-number">381</span><br><span class="line-number">382</span><br><span class="line-number">383</span><br><span class="line-number">384</span><br><span class="line-number">385</span><br><span class="line-number">386</span><br><span class="line-number">387</span><br><span class="line-number">388</span><br><span class="line-number">389</span><br><span class="line-number">390</span><br><span class="line-number">391</span><br><span class="line-number">392</span><br><span class="line-number">393</span><br><span class="line-number">394</span><br><span class="line-number">395</span><br><span class="line-number">396</span><br><span class="line-number">397</span><br><span class="line-number">398</span><br><span class="line-number">399</span><br><span class="line-number">400</span><br><span class="line-number">401</span><br><span class="line-number">402</span><br><span class="line-number">403</span><br><span class="line-number">404</span><br><span class="line-number">405</span><br><span class="line-number">406</span><br><span class="line-number">407</span><br><span class="line-number">408</span><br><span class="line-number">409</span><br><span class="line-number">410</span><br><span class="line-number">411</span><br><span class="line-number">412</span><br><span class="line-number">413</span><br><span class="line-number">414</span><br><span class="line-number">415</span><br><span class="line-number">416</span><br><span class="line-number">417</span><br><span class="line-number">418</span><br><span class="line-number">419</span><br><span class="line-number">420</span><br><span class="line-number">421</span><br><span class="line-number">422</span><br><span class="line-number">423</span><br><span class="line-number">424</span><br><span class="line-number">425</span><br><span class="line-number">426</span><br><span class="line-number">427</span><br><span class="line-number">428</span><br><span class="line-number">429</span><br><span class="line-number">430</span><br><span class="line-number">431</span><br><span class="line-number">432</span><br><span class="line-number">433</span><br><span class="line-number">434</span><br><span class="line-number">435</span><br><span class="line-number">436</span><br><span class="line-number">437</span><br><span class="line-number">438</span><br><span class="line-number">439</span><br><span class="line-number">440</span><br><span class="line-number">441</span><br><span class="line-number">442</span><br><span class="line-number">443</span><br><span class="line-number">444</span><br><span class="line-number">445</span><br><span class="line-number">446</span><br><span class="line-number">447</span><br><span class="line-number">448</span><br><span class="line-number">449</span><br><span class="line-number">450</span><br><span class="line-number">451</span><br><span class="line-number">452</span><br><span class="line-number">453</span><br><span class="line-number">454</span><br><span class="line-number">455</span><br><span class="line-number">456</span><br><span class="line-number">457</span><br><span class="line-number">458</span><br><span class="line-number">459</span><br><span class="line-number">460</span><br><span class="line-number">461</span><br><span class="line-number">462</span><br><span class="line-number">463</span><br><span class="line-number">464</span><br><span class="line-number">465</span><br><span class="line-number">466</span><br><span class="line-number">467</span><br><span class="line-number">468</span><br><span class="line-number">469</span><br><span class="line-number">470</span><br><span class="line-number">471</span><br><span class="line-number">472</span><br><span class="line-number">473</span><br><span class="line-number">474</span><br><span class="line-number">475</span><br><span class="line-number">476</span><br><span class="line-number">477</span><br><span class="line-number">478</span><br><span class="line-number">479</span><br><span class="line-number">480</span><br><span class="line-number">481</span><br><span class="line-number">482</span><br><span class="line-number">483</span><br><span class="line-number">484</span><br><span class="line-number">485</span><br><span class="line-number">486</span><br><span class="line-number">487</span><br><span class="line-number">488</span><br><span class="line-number">489</span><br><span class="line-number">490</span><br><span class="line-number">491</span><br><span class="line-number">492</span><br><span class="line-number">493</span><br><span class="line-number">494</span><br><span class="line-number">495</span><br><span class="line-number">496</span><br><span class="line-number">497</span><br><span class="line-number">498</span><br><span class="line-number">499</span><br><span class="line-number">500</span><br><span class="line-number">501</span><br><span class="line-number">502</span><br><span class="line-number">503</span><br><span class="line-number">504</span><br><span class="line-number">505</span><br><span class="line-number">506</span><br><span class="line-number">507</span><br><span class="line-number">508</span><br><span class="line-number">509</span><br><span class="line-number">510</span><br><span class="line-number">511</span><br><span class="line-number">512</span><br><span class="line-number">513</span><br><span class="line-number">514</span><br><span class="line-number">515</span><br><span class="line-number">516</span><br><span class="line-number">517</span><br><span class="line-number">518</span><br><span class="line-number">519</span><br><span class="line-number">520</span><br><span class="line-number">521</span><br><span class="line-number">522</span><br><span class="line-number">523</span><br><span class="line-number">524</span><br><span class="line-number">525</span><br><span class="line-number">526</span><br><span class="line-number">527</span><br><span class="line-number">528</span><br><span class="line-number">529</span><br><span class="line-number">530</span><br><span class="line-number">531</span><br><span class="line-number">532</span><br><span class="line-number">533</span><br><span class="line-number">534</span><br><span class="line-number">535</span><br><span class="line-number">536</span><br><span class="line-number">537</span><br><span class="line-number">538</span><br><span class="line-number">539</span><br><span class="line-number">540</span><br><span class="line-number">541</span><br><span class="line-number">542</span><br><span class="line-number">543</span><br><span class="line-number">544</span><br><span class="line-number">545</span><br><span class="line-number">546</span><br><span class="line-number">547</span><br></div></div><h3 id="_1-2-ov-yolov8-h"><a href="#_1-2-ov-yolov8-h" class="header-anchor">#</a> 1.2 ov_yolov8.h</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>#pragma once
+#ifdef OV_YOLOV8_EXPORTS
+#define OV_YOLOV8_API _declspec(dllexport)
+#else
+#define OV_YOLOV8_API _declspec(dllimport)
+#endif
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;random&gt;
+#include &lt;openvino/openvino.hpp&gt; //openvino header file
+#include &lt;opencv2/opencv.hpp&gt;    //opencv header file
+using namespace cv;
+using namespace std;
+using namespace dnn;
+
+// 定义输出结构体
+typedef struct {
+    float prob;
+    cv::Rect rect;
+    int classid;
+}Object;
+
+//定义类
+class OV_YOLOV8_API YoloModel
+{
+public:
+    YoloModel();
+    ~YoloModel();
+    //检测
+    bool LoadDetectModel(const string&amp; xmlName, string&amp; device);
+    bool YoloDetectInfer(const Mat&amp; src, double cof_threshold, double nms_area_threshold, Mat&amp; dst, vector&lt;Object&gt;&amp; vecObj);
+
+    //分类
+    bool YoloClsInfer(const Mat&amp; src, double cof_threshold, double nms_area_threshold, Mat&amp; dst, vector&lt;Object&gt;&amp; vecObj);
+    bool LoadClsModel(const string&amp; xmlName, string&amp; device);
+
+    //分割
+    bool LoadSegModel(const string&amp; xmlName, string&amp; device);
+    bool YoloSegInfer(const Mat&amp; src, double cof_threshold, double nms_area_threshold, Mat&amp; dst, vector&lt;Object&gt;&amp; vecObj);
+
+    //姿态
+    bool LoadPoseModel(const string&amp; xmlName, string&amp; device);
+    bool YoloPoseInfer(const Mat&amp; src, double cof_threshold, double nms_area_threshold, Mat&amp; dst, vector&lt;Object&gt;&amp; vecObj);
+
+private:
+    ov::InferRequest infer_request_Detect;
+    ov::CompiledModel compiled_model_Detect;
+
+    ov::InferRequest infer_request_Cls;
+    ov::CompiledModel compiled_model_Detect_Cls;
+
+    ov::InferRequest infer_request_Seg;
+    ov::CompiledModel compiled_model_Seg;
+
+    ov::InferRequest infer_request_Pose;
+    ov::CompiledModel compiled_model_Pose;
+
+    //增加函数
+    // Keep the ratio before resize
+    void letterbox(const Mat&amp; source, Mat&amp; result);
+    void sigmoid_function(float a, float&amp; b);
+    void plot_keypoints(cv::Mat&amp; image, const std::vector&lt;std::vector&lt;float&gt;&gt;&amp; keypoints, const cv::Size&amp; shape);
+};
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br></div></div><h2 id="_2-batch-test"><a href="#_2-batch-test" class="header-anchor">#</a> 2.Batch_Test</h2> <h3 id="_2-1-batch-test-cpp"><a href="#_2-1-batch-test-cpp" class="header-anchor">#</a> 2.1 Batch_Test.cpp</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>#include &lt;iostream&gt;
+#include &quot;ov_yolov8.h&quot;
+#pragma comment(lib,&quot;..//x64//Release//OV_YOLOV8_DLL.lib&quot;)
+
+int main(int argc, char* argv[])
+{
+    YoloModel yolomodel;
+    string xmlName_Detect = &quot;./yolov8/model/yolov8n.xml&quot;;
+    string xmlName_Cls = &quot;./yolov8/model/yolov8n-cls.xml&quot;;
+    string xmlName_Seg = &quot;./yolov8/model/yolov8n-seg.xml&quot;;
+    string xmlName_Pose = &quot;./yolov8/model/yolov8n-Pose.xml&quot;;
+    string device = &quot;GPU&quot;;
+    bool initDetectflag = yolomodel.LoadDetectModel(xmlName_Detect, device);
+    bool initClsflag = yolomodel.LoadClsModel(xmlName_Cls, device);
+    bool initSegflag = yolomodel.LoadSegModel(xmlName_Seg, device);
+    bool initPoseflag = yolomodel.LoadPoseModel(xmlName_Pose, device);
+    if (initDetectflag == true)
+    {
+        cout &lt;&lt; &quot;检测模型初始化成功&quot; &lt;&lt; endl;
+    }
+    if (initClsflag == true)
+    {
+        cout &lt;&lt; &quot;分类模型初始化成功&quot; &lt;&lt; endl;
+    }
+    if (initSegflag == true)
+    {
+        cout &lt;&lt; &quot;分割模型初始化成功&quot; &lt;&lt; endl;
+    }
+    if (initPoseflag == true)
+    {
+        cout &lt;&lt; &quot;姿态模型初始化成功&quot; &lt;&lt; endl;
+    }
+    // 读取图像
+    Mat img_Detect = cv::imread(&quot;./yolov8/img/bus.jpg&quot;);
+    Mat img_Cls = img_Detect.clone();
+    Mat img_Seg = img_Detect.clone();
+    Mat img_Pose = img_Detect.clone();
+
+    // 检测推理
+    Mat dst_detect;
+    double cof_threshold_detect  = 0.25;
+    double nms_area_threshold_detect = 0.5;
+    vector&lt;Object&gt; vecObj = {};
+    bool InferDetectflag = yolomodel.YoloDetectInfer(img_Detect, cof_threshold_detect, nms_area_threshold_detect, dst_detect, vecObj);
+
+    // 分类推理
+    Mat dst_cls;
+    double cof_threshold_Cls = 0.25;
+    double nms_area_threshold_Cls = 0.5;
+    vector&lt;Object&gt; vecObj_cls = {};
+    bool InferClsflag = yolomodel.YoloClsInfer(img_Cls, cof_threshold_Cls, nms_area_threshold_Cls, dst_cls, vecObj_cls);
+
+    // 分割推理
+    Mat dst_seg;
+    double cof_threshold_Seg = 0.25;
+    double nms_area_threshold_Seg = 0.5;
+    vector&lt;Object&gt; vecObj_seg = {};
+    bool InferSegflag = yolomodel.YoloSegInfer(img_Seg, cof_threshold_Seg, nms_area_threshold_Seg, dst_seg, vecObj_seg);
+
+    // 姿态推理
+    Mat dst_pose;
+    double cof_threshold_Pose = 0.25;
+    double nms_area_threshold_Pose = 0.5;
+    vector&lt;Object&gt; vecObj_Pose = {};
+    bool InferPoseflag = yolomodel.YoloPoseInfer(img_Pose, cof_threshold_Pose, nms_area_threshold_Pose, dst_pose, vecObj_Pose);
+
+    namedWindow(&quot;dst_pose&quot;, WINDOW_NORMAL);
+    //imshow(&quot;dst_detect&quot;, dst_detect);
+    imshow(&quot;dst_pose&quot;, dst_pose);
+    waitKey(0);
+    destroyAllWindows();
+    return 0;
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br></div></div><h2 id="_3-完整工程"><a href="#_3-完整工程" class="header-anchor">#</a> 3. 完整工程</h2> <p><a href="https://link.zhihu.com/?target=https%3A//download.csdn.net/download/qq_44747572/88580524" target="_blank" rel="noopener noreferrer">https://download.csdn.net/download/qq_44747572/88580524<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>本文来自本人CSDN博客：<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/qq_44747572/article/details/134309299%3Fspm%3D1001.2014.3001.5502" target="_blank" rel="noopener noreferrer">【模型c++部署】yolov8（检测、分类、分割、姿态）使用openvino进行部署-CSDN博客<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>本文转自 <a href="https://zhuanlan.zhihu.com/p/670618199" target="_blank" rel="noopener noreferrer">https://zhuanlan.zhihu.com/p/670618199<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>，如有侵权，请联系删除。</p></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-7828333725993554"
+            data-ad-slot="6620245489"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script></div> <div class="page-edit"><div class="edit-link"><a href="https://github.com/kongenen/kongenen.github.io/edit/master/docs/01.机器视觉/15.模型部署/30.【模型c++部署】yolov8（检测、分类、分割、姿态）使用openvino进行部署 .md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <!----> <!----></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/82feee/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">路面分割-车道线条检测-深度估计模型python-onnx部署记录</div></a> <a href="/pages/8143cc480faf9a11/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">new命令原理</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/82feee/" class="prev">路面分割-车道线条检测-深度估计模型python-onnx部署记录</a></span> <span class="next"><a href="/pages/8143cc480faf9a11/">new命令原理</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/9d0fa1/"><div>
+            附录L_CUDA底层驱动API
+            <!----></div></a> <span class="date">02-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/89f6da/"><div>
+            附录K_CUDA计算能力
+            <!----></div></a> <span class="date">02-08</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/a275b1/"><div>
+            附录J纹理获取
+            <!----></div></a> <span class="date">02-08</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="https://msg.cnblogs.com/send/kongen" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://github.com/kongenen" title="GitHub" target="_blank" class="iconfont icon-github"></a><a href="https://music.163.com/playlist?id=954048881&amp;userid=615968278" title="听音乐" target="_blank" class="iconfont icon-erji"></a></div> 
+  Theme by
+  <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> 
+    | Copyright © 2024-2025
+    <span>Kongen | <a href="https://github.com/xugaoyi/vuepress-theme-vdoing/blob/master/LICENSE" target="_blank">MIT License</a></span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <div class="body-bg" style="background:url() center center / cover no-repeat;opacity:0.5;"></div> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><span class="close-but">×</span> <div><!-- 固定160*160px -->
+        <ins class="adsbygoogle"
+            style="display:inline-block;max-width:160px;max-height:160px"
+            data-ad-client="ca-pub-7828333725993554"
+            data-ad-slot="8377369658"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        </div></div></div></div><div class="global-ui"><div></div><div></div><div></div><div></div></div></div>
+    <script src="/assets/js/app.03b8874a.js" defer></script><script src="/assets/js/2.a3bc2cb2.js" defer></script><script src="/assets/js/32.b0b0a6d4.js" defer></script><script src="/assets/js/6.2f3b94ea.js" defer></script><script src="/assets/js/11.bd26694d.js" defer></script><script src="/assets/js/4.bfee93d3.js" defer></script>
+  </body>
+</html>
